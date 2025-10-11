@@ -58,10 +58,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'business',
     difficulty: 'beginner',
-    tags: ['swot', 'strategy', 'planning', 'analysis', 'business'],
-    usageCount: 1247,
-    createdAt: '2024-01-15T08:30:00Z',
-    updatedAt: '2024-10-05T14:22:00Z'
+    usageCount: 1247
   },
 
   {
@@ -93,10 +90,7 @@ export const templates: Template[] = [
     type: 'journey',
     category: 'business',
     difficulty: 'intermediate',
-    tags: ['customer-journey', 'ux', 'experience', 'conversion', 'marketing'],
-    usageCount: 892,
-    createdAt: '2024-02-10T10:15:00Z',
-    updatedAt: '2024-09-28T16:45:00Z'
+    usageCount: 892
   },
 
   {
@@ -130,10 +124,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'business',
     difficulty: 'beginner',
-    tags: ['sales', 'funnel', 'conversion', 'pipeline', 'marketing'],
-    usageCount: 1456,
-    createdAt: '2024-01-20T09:00:00Z',
-    updatedAt: '2024-10-08T11:30:00Z'
+    usageCount: 1456
   },
 
   {
@@ -174,10 +165,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'business',
     difficulty: 'beginner',
-    tags: ['organization', 'hierarchy', 'structure', 'team', 'management'],
-    usageCount: 2103,
-    createdAt: '2024-01-25T14:20:00Z',
-    updatedAt: '2024-10-09T09:15:00Z'
+    usageCount: 2103
   },
 
   // ==================== TECHNICAL CATEGORY (4) ====================
@@ -223,10 +211,7 @@ export const templates: Template[] = [
     type: 'sequence',
     category: 'technical',
     difficulty: 'intermediate',
-    tags: ['api', 'rest', 'authentication', 'jwt', 'backend'],
-    usageCount: 1678,
-    createdAt: '2024-02-01T11:00:00Z',
-    updatedAt: '2024-10-07T15:40:00Z'
+    usageCount: 1678
   },
 
   {
@@ -292,10 +277,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'technical',
     difficulty: 'advanced',
-    tags: ['microservices', 'architecture', 'distributed', 'system-design', 'backend'],
-    usageCount: 945,
-    createdAt: '2024-02-15T13:30:00Z',
-    updatedAt: '2024-10-03T10:20:00Z'
+    usageCount: 945
   },
 
   {
@@ -353,10 +335,7 @@ export const templates: Template[] = [
     type: 'git',
     category: 'technical',
     difficulty: 'intermediate',
-    tags: ['git', 'version-control', 'workflow', 'branching', 'devops'],
-    usageCount: 1834,
-    createdAt: '2024-02-20T09:45:00Z',
-    updatedAt: '2024-10-06T14:55:00Z'
+    usageCount: 1834
   },
 
   {
@@ -435,10 +414,7 @@ export const templates: Template[] = [
     type: 'er',
     category: 'technical',
     difficulty: 'intermediate',
-    tags: ['database', 'schema', 'erd', 'relationships', 'data-modeling'],
-    usageCount: 1523,
-    createdAt: '2024-03-01T10:30:00Z',
-    updatedAt: '2024-10-04T16:10:00Z'
+    usageCount: 1523
   },
 
   // ==================== EDUCATION CATEGORY (4) ====================
@@ -485,10 +461,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'education',
     difficulty: 'beginner',
-    tags: ['learning', 'roadmap', 'education', 'career', 'development'],
-    usageCount: 2567,
-    createdAt: '2024-03-10T08:00:00Z',
-    updatedAt: '2024-10-09T12:30:00Z'
+    usageCount: 2567
   },
 
   {
@@ -541,10 +514,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'education',
     difficulty: 'beginner',
-    tags: ['mindmap', 'concepts', 'machine-learning', 'ai', 'study'],
-    usageCount: 1789,
-    createdAt: '2024-03-15T11:20:00Z',
-    updatedAt: '2024-10-08T09:45:00Z'
+    usageCount: 1789
   },
 
   {
@@ -587,10 +557,7 @@ export const templates: Template[] = [
     type: 'gantt',
     category: 'education',
     difficulty: 'beginner',
-    tags: ['timeline', 'history', 'chronology', 'programming', 'education'],
-    usageCount: 1234,
-    createdAt: '2024-03-20T14:00:00Z',
-    updatedAt: '2024-10-05T11:15:00Z'
+    usageCount: 1234
   },
 
   {
@@ -641,10 +608,7 @@ export const templates: Template[] = [
     type: 'flowchart',
     category: 'education',
     difficulty: 'beginner',
-    tags: ['process', 'sdlc', 'workflow', 'tutorial', 'methodology'],
-    usageCount: 1987,
-    createdAt: '2024-03-25T09:30:00Z',
-    updatedAt: '2024-10-07T13:20:00Z'
+    usageCount: 1987
   }
 ];
 
@@ -698,7 +662,7 @@ export const getPopularTemplates = (limit: number = 5): Template[] => {
 };
 
 /**
- * Search templates by name, description, or tags
+ * Search templates by name, description, or category
  * @param query - Search query string
  * @returns Array of templates matching the search query
  */
@@ -707,7 +671,7 @@ export const searchTemplates = (query: string): Template[] => {
   return templates.filter(template => 
     template.name.toLowerCase().includes(lowerQuery) ||
     template.description.toLowerCase().includes(lowerQuery) ||
-    template.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+    template.category.toLowerCase().includes(lowerQuery)
   );
 };
 
