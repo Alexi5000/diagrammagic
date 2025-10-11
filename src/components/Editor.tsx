@@ -2,14 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-interface EditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  className?: string;
-  promptValue: string;
-  onPromptChange: (value: string) => void;
-}
+import { EditorProps } from '@/types';
 
 const Editor: React.FC<EditorProps> = ({
   value,

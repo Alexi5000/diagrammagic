@@ -1,11 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Download, Github, Moon, Sun } from "lucide-react";
-interface HeaderProps {
-  onExport: () => void;
-  toggleTheme: () => void;
-  isDarkMode: boolean;
-}
+import { HeaderProps } from "@/types";
 const Header: React.FC<HeaderProps> = ({
   onExport,
   toggleTheme,

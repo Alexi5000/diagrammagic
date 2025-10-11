@@ -3,11 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-interface PreviewProps {
-  code: string;
-  className?: string;
-}
+import { PreviewProps } from '@/types';
 
 const Preview: React.FC<PreviewProps> = ({ code, className }) => {
   const [svg, setSvg] = useState<string>('');

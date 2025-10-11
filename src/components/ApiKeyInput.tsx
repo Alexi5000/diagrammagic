@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Key, Check, X } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { ApiKeyInputProps } from '@/types';
 
-const ApiKeyInput = () => {
+const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ className, onKeySaved }) => {
   const [apiKey, setApiKey] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);

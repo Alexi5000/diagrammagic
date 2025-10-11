@@ -11,12 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-interface AIPromptProps {
-  prompt: string;
-  onDiagramGenerated: (diagram: string) => void;
-  className?: string;
-}
+import { AIPromptProps } from '@/types';
 
 const AIPrompt: React.FC<AIPromptProps> = ({ prompt, onDiagramGenerated, className }) => {
   const [loading, setLoading] = useState(false);
