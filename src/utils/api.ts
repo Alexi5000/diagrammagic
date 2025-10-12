@@ -3,6 +3,8 @@
  * API utility for generating Mermaid diagrams using GPT-4o-mini
  */
 
+import { generateDiagram as generateMockDiagram } from '@/lib/mockAI';
+
 const API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 
 // Check if we should use the mock API or the real one
@@ -13,52 +15,7 @@ const shouldUseMock = () => {
 
 export const generateMermaidDiagram = async (prompt: string): Promise<string> => {
   if (shouldUseMock()) {
-    // For demo purposes, simulate API call with a delay
-    console.log('Using MOCK generation with prompt:', prompt);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Return a sample diagram based on the prompt
-    if (prompt.toLowerCase().includes('flowchart')) {
-      return `flowchart TD
-    A[Start] --> B{Is it raining?}
-    B -->|Yes| C[Take umbrella]
-    B -->|No| D[Enjoy the sun]
-    C --> E[Go outside]
-    D --> E
-    E --> F[End]`;
-    } else if (prompt.toLowerCase().includes('sequence')) {
-      return `sequenceDiagram
-    participant User
-    participant System
-    participant Database
-    
-    User->>System: Request data
-    System->>Database: Query data
-    Database-->>System: Return results
-    System-->>User: Display results`;
-    } else if (prompt.toLowerCase().includes('class')) {
-      return `classDiagram
-    class Animal {
-      +name: string
-      +age: int
-      +makeSound(): void
-    }
-    class Dog {
-      +breed: string
-      +fetch(): void
-    }
-    class Cat {
-      +color: string
-      +climb(): void
-    }
-    Animal <|-- Dog
-    Animal <|-- Cat`;
-    } else {
-      return `graph TD
-    A[${prompt.substring(0, 20)}...] --> B[Generated]
-    B --> C[Diagram]
-    C --> D[Example]`;
-    }
+    return await generateMockDiagram(prompt);
   }
   
   try {
