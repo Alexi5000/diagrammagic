@@ -4,22 +4,17 @@ import mermaid from 'mermaid';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PreviewProps } from '@/types';
+import { initMermaid } from '@/lib/mermaidConfig';
 
-const Preview: React.FC<PreviewProps> = ({ code, className }) => {
+const Preview: React.FC<PreviewProps> = ({ code, className, isDarkMode = false }) => {
   const [svg, setSvg] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Initialize mermaid with custom config
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
-      securityLevel: 'loose',
-      fontFamily: 'Inter, sans-serif',
-    });
-  }, []);
+    initMermaid(isDarkMode);
+  }, [isDarkMode]);
   
   useEffect(() => {
     const renderDiagram = async () => {

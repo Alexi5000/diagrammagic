@@ -7,6 +7,7 @@ import AIPrompt from '@/components/AIPrompt';
 import { toast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { saveAs } from 'file-saver';
+import { initMermaid } from '@/lib/mermaidConfig';
 
 const DEFAULT_DIAGRAM = `graph TD
     A[Start] --> B{Decision}
@@ -36,8 +37,10 @@ const Index = () => {
       document.documentElement.classList.remove('dark');
     }
     
+    // Re-initialize Mermaid with new theme
+    initMermaid(newDarkMode);
+    
     // Re-render the diagram with the new theme
-    // This forces the Mermaid renderer to use the new theme
     const currentCode = code;
     setCode('');
     setTimeout(() => setCode(currentCode), 10);
@@ -119,7 +122,7 @@ const Index = () => {
           </div>
           
           <div className="glass-panel p-4 flex flex-col animate-slide-in" style={{ animationDelay: '100ms' }}>
-            <Preview code={code} className="flex-1" />
+            <Preview code={code} className="flex-1" isDarkMode={isDarkMode} />
           </div>
         </div>
         

@@ -251,6 +251,9 @@ export interface PreviewProps {
   
   /** Loading state */
   isLoading?: boolean;
+  
+  /** Dark mode state */
+  isDarkMode?: boolean;
 }
 
 /**
