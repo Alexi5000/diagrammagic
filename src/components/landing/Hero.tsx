@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 
 // Placeholder components until installed
 const Hyperspeed = ({ className, particleCount, speed, color, particleSize }: any) => null;
-const SplitText = ({ text, className }: any) => <h1 className={className}>{text}</h1>;
-const ShinyText = ({ text, className }: any) => <h2 className={className}>{text}</h2>;
+const SplitText = ({ text, className, delay, animationFrom, animationTo, duration }: any) => <h1 className={className}>{text}</h1>;
+const ShinyText = ({ text, className, shimmerWidth, speed, shimmerColor }: any) => <h2 className={className}>{text}</h2>;
 
 export default function Hero() {
   const isMobile = useIsMobile();
@@ -27,12 +27,7 @@ export default function Hero() {
       />
       
       {/* Gradient Overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent)'
-        }}
-      />
+      <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
       
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
@@ -40,12 +35,27 @@ export default function Hero() {
         <SplitText 
           text="Transform Ideas Into"
           className="text-5xl md:text-7xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-400 bg-clip-text text-transparent mb-4"
+          delay={50}
+          animationFrom={{ 
+            opacity: 0, 
+            y: -20, 
+            filter: 'blur(8px)' 
+          }}
+          animationTo={{ 
+            opacity: 1, 
+            y: 0, 
+            filter: 'blur(0px)' 
+          }}
+          duration={0.5}
         />
         
         {/* Accent Text with ShinyText */}
         <ShinyText 
           text="Beautiful Diagrams"
-          className="text-5xl md:text-7xl font-black text-blue-500 mb-8"
+          className="text-5xl md:text-7xl font-black text-electric-blue mb-8"
+          shimmerWidth={200}
+          speed={3}
+          shimmerColor="rgba(255, 255, 255, 0.8)"
         />
         
         {/* Subtitle */}
@@ -57,11 +67,11 @@ export default function Hero() {
         {/* CTA Buttons */}
         <div className="flex gap-6 justify-center flex-wrap">
           <MagneticButton variant="primary" asChild>
-            <Link to="/editor">Start Creating Free</Link>
+            <Link to="/editor">Start Creating</Link>
           </MagneticButton>
           
           <MagneticButton variant="outline" asChild>
-            <a href="#features">Explore Features</a>
+            <a href="#templates">View Templates</a>
           </MagneticButton>
         </div>
       </div>
