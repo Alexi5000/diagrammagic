@@ -4,10 +4,9 @@ import Header from '@/components/Header';
 import Editor from '@/components/Editor';
 import Preview from '@/components/Preview';
 import AIPrompt from '@/components/AIPrompt';
-import { toast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
-import { saveAs } from 'file-saver';
 import { initMermaid } from '@/lib/mermaidConfig';
+import { exportDiagramAsSVG } from '@/lib/exportSVG';
 
 const DEFAULT_DIAGRAM = `graph TD
     A[Start] --> B{Decision}
@@ -47,49 +46,8 @@ const Index = () => {
   };
 
   const handleExport = () => {
-    try {
-      const svgElement = document.querySelector('.diagram-container svg');
-      if (!svgElement) {
-        toast({
-          title: "Export failed",
-          description: "No diagram to export",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      // Get SVG content
-      const svgData = new XMLSerializer().serializeToString(svgElement);
-      const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
-      
-      // Generate filename from first line of diagram or use default
-      let filename = 'mermaid-diagram.svg';
-      const firstLine = code.split('\n')[0];
-      if (firstLine) {
-        const cleanName = firstLine
-          .replace(/[^\w\s]/gi, '')
-          .trim()
-          .replace(/\s+/g, '-')
-          .toLowerCase();
-        if (cleanName) {
-          filename = `${cleanName}.svg`;
-        }
-      }
-      
-      saveAs(svgBlob, filename);
-      
-      toast({
-        title: "Export successful",
-        description: `Saved as ${filename}`,
-      });
-    } catch (error) {
-      console.error('Export error:', error);
-      toast({
-        title: "Export failed",
-        description: "Failed to export diagram",
-        variant: "destructive",
-      });
-    }
+    const firstLine = code.split('\n')[0].trim();
+    exportDiagramAsSVG(firstLine);
   };
 
   const handleDiagramGenerated = (generatedCode: string) => {
