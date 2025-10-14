@@ -1,11 +1,10 @@
 import { Sparkles, Eye, Download, Zap, Shield, Code } from 'lucide-react';
-import { GlassPanel } from '@/components/shared/GlassPanel';
+import { FeatureCard } from '@/components/shared/FeatureCard';
 
-// React Bits components - install with:
+// React Bits component - install with:
 // npx jsrepo add https://reactbits.dev/tailwind/Components/Stack
-// npx jsrepo add https://reactbits.dev/tailwind/Animations/FadeContent
 
-// Placeholder components
+// Placeholder component
 const Stack = ({ items, className }: any) => (
   <div className={className}>
     {items.map((item: any) => (
@@ -13,7 +12,6 @@ const Stack = ({ items, className }: any) => (
     ))}
   </div>
 );
-const FadeContent = ({ children, animation, delay }: any) => <div className="animate-fade-in">{children}</div>;
 
 const features = [
   {
@@ -60,34 +58,10 @@ const features = [
   }
 ];
 
-const FeatureCard = ({ icon: Icon, title, description, accentColor }: typeof features[0]) => {
-  const colors = {
-    blue: 'text-blue-500',
-    violet: 'text-violet-500',
-    cyan: 'text-cyan-500'
-  };
-
-  return (
-    <GlassPanel className="group hover:scale-105 transition-transform duration-300 cursor-pointer h-full">
-      <div className={`text-4xl mb-4 group-hover:scale-110 transition-transform ${colors[accentColor]}`}>
-        <Icon size={40} />
-      </div>
-      
-      <h3 className="text-2xl font-bold mb-3 text-white">
-        {title}
-      </h3>
-      
-      <p className="text-slate-300 leading-relaxed text-lg">
-        {description}
-      </p>
-    </GlassPanel>
-  );
-};
-
 export default function FeatureShowcase() {
-  const stackItems = features.slice(0, 3).map(feature => ({
+  const stackItems = features.slice(0, 3).map((feature, index) => ({
     id: feature.id,
-    content: <FeatureCard key={feature.id} {...feature} />
+    content: <FeatureCard key={feature.id} {...feature} index={index} />
   }));
 
   return (
@@ -117,10 +91,8 @@ export default function FeatureShowcase() {
 
         {/* Grid - Remaining Features */}
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {features.slice(3).map((feature) => (
-            <FadeContent key={feature.id} animation="slide" delay={feature.id * 100}>
-              <FeatureCard {...feature} />
-            </FadeContent>
+          {features.slice(3).map((feature, index) => (
+            <FeatureCard key={feature.id} {...feature} index={index + 3} />
           ))}
         </div>
       </div>
