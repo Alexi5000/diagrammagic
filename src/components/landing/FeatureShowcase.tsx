@@ -1,17 +1,6 @@
 import { Sparkles, Eye, Download, Zap, Shield, Code } from 'lucide-react';
 import { FeatureCard } from '@/components/shared/FeatureCard';
-
-// React Bits component - install with:
-// npx jsrepo add https://reactbits.dev/tailwind/Components/Stack
-
-// Placeholder component
-const Stack = ({ items, className }: any) => (
-  <div className={className}>
-    {items.map((item: any) => (
-      <div key={item.id} className="mb-8">{item.content}</div>
-    ))}
-  </div>
-);
+import { Stack } from '@/components/react-bits/Stack';
 
 const features = [
   {
@@ -65,13 +54,13 @@ export default function FeatureShowcase() {
   }));
 
   return (
-    <section id="features" className="py-24 px-6">
+    <section id="features" className="py-24 px-6" aria-labelledby="features-heading">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 id="features-heading" className="text-4xl md:text-5xl font-bold text-white mb-6">
             Everything You Need to Create{' '}
-            <span className="bg-gradient-to-r from-blue-500 to-violet-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-electric-blue to-neon-violet bg-clip-text text-transparent">
               Amazing Diagrams
             </span>
           </h2>
@@ -82,15 +71,20 @@ export default function FeatureShowcase() {
         </div>
 
         {/* Stack Component - First 3 Features */}
-        <div className="mb-16">
+        <div className="mb-16" aria-label="Featured capabilities">
           <Stack 
             items={stackItems}
-            className="max-w-4xl mx-auto space-y-8"
+            offset={25}
+            scaleFactor={0.05}
+            className="max-w-4xl mx-auto"
           />
         </div>
 
         {/* Grid - Remaining Features */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div 
+          className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          aria-label="Additional features"
+        >
           {features.slice(3).map((feature, index) => (
             <FeatureCard key={feature.id} {...feature} index={index + 3} />
           ))}

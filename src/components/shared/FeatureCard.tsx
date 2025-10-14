@@ -25,15 +25,15 @@ export const FeatureCard = ({
 }: FeatureCardProps) => {
   const colors = {
     blue: {
-      text: 'text-blue-500',
+      text: 'text-electric-blue',
       glow: 'blue' as const
     },
     violet: {
-      text: 'text-violet-500',
+      text: 'text-neon-violet',
       glow: 'violet' as const
     },
     cyan: {
-      text: 'text-cyan-500',
+      text: 'text-cyber-cyan',
       glow: 'cyan' as const
     }
   };
