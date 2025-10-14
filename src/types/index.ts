@@ -229,11 +229,11 @@ export interface EditorProps {
   /** Code change handler */
   onChange: (value: string) => void;
   
-  /** Current AI prompt */
-  promptValue: string;
+  /** Current AI prompt (optional) */
+  promptValue?: string;
   
-  /** Prompt change handler */
-  onPromptChange: (value: string) => void;
+  /** Prompt change handler (optional) */
+  onPromptChange?: (value: string) => void;
   
   /** Optional className */
   className?: string;

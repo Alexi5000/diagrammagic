@@ -73,8 +73,8 @@ const Editor: React.FC<EditorProps> = ({
         <TabsContent value="prompt" className="flex-1 mt-0 h-full">
           <div className="h-full">
             <textarea
-              value={promptValue}
-              onChange={(e) => onPromptChange(e.target.value)}
+              value={promptValue || ''}
+              onChange={(e) => onPromptChange?.(e.target.value)}
               placeholder="Describe the diagram you want to create..."
               className="editor-container h-full resize-none animate-fade-in"
               spellCheck="false"

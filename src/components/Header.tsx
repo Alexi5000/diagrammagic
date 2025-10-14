@@ -7,7 +7,7 @@ const Header: React.FC<HeaderProps> = ({
   toggleTheme,
   isDarkMode
 }) => {
-  return <header className="w-full py-4 px-6 border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-sm bg-white/50 dark:bg-black/30 animate-fade-in">
+  return <header className="sticky top-0 z-50 w-full py-4 px-6 border-b border-glass-border backdrop-blur-glass bg-glass-white shadow-lg animate-fade-in">
       <div className="container max-w-full flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-semibold">M</div>
