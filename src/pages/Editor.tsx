@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Toolbar from '@/components/editor/Toolbar';
 import CodeEditor from '@/components/editor/CodeEditor';
 import PreviewPanel from '@/components/editor/PreviewPanel';
@@ -9,11 +10,13 @@ import { exportDiagramAsSVG } from '@/lib/exportSVG';
 import { detectDiagramType, generateDefaultTitle } from '@/lib/detectDiagramType';
 import { useDiagramStore } from '@/hooks/useDiagramStore';
 import { sampleDiagrams } from '@/data/sampleDiagrams';
+import { templates } from '@/data/templates';
 import { Template, DiagramType } from '@/types';
 import { toast } from '@/hooks/use-toast';
 
 const EditorPage = () => {
   const { addDiagram } = useDiagramStore();
+  const [searchParams] = useSearchParams();
   
   const [code, setCode] = useState<string>(sampleDiagrams[0].code);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
@@ -31,6 +34,24 @@ const EditorPage = () => {
     const isDark = document.documentElement.classList.contains('dark');
     setIsDarkMode(isDark);
   }, []);
+
+  // Load template from URL parameter on mount
+  useEffect(() => {
+    const templateId = searchParams.get('template');
+    if (templateId) {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        setCode(template.code);
+        setLastSavedCode(template.code);
+        setIsSaved(true);
+        
+        toast({
+          title: "Template loaded",
+          description: `Loaded "${template.name}" template`,
+        });
+      }
+    }
+  }, [searchParams]);
 
   // Track save state when code changes
   useEffect(() => {
