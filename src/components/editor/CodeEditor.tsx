@@ -104,18 +104,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       return;
     }
 
-    // Check if API key is set
-    const hasApiKey = localStorage.getItem('openai_api_key');
-    if (!hasApiKey) {
-      setApiKeyPopoverOpen(true);
-      toast({
-        title: "API Key Required",
-        description: "Please add your OpenAI API key first",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       setLoading(true);
       const diagram = await generateMermaidDiagram(promptValue);
