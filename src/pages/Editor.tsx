@@ -15,7 +15,7 @@ import { Template, DiagramType } from '@/types';
 import { toast } from '@/hooks/use-toast';
 
 const EditorPage = () => {
-  const { addDiagram } = useDiagramStore();
+  const { addDiagram, updateDiagram, getDiagramById } = useDiagramStore();
   const [searchParams] = useSearchParams();
   
   const [code, setCode] = useState<string>(sampleDiagrams[0].code);
@@ -28,6 +28,7 @@ const EditorPage = () => {
   const [showSaveDialog, setShowSaveDialog] = useState<boolean>(false);
   const [detectedType, setDetectedType] = useState<DiagramType>('flowchart');
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [currentDiagramId, setCurrentDiagramId] = useState<string | null>(null);
 
   // Initialize theme on component mount
   useEffect(() => {
@@ -35,15 +36,31 @@ const EditorPage = () => {
     setIsDarkMode(isDark);
   }, []);
 
-  // Load template from URL parameter on mount
+  // Load template or diagram from URL parameter on mount
   useEffect(() => {
+    const diagramId = searchParams.get('diagram');
     const templateId = searchParams.get('template');
-    if (templateId) {
+    
+    if (diagramId) {
+      const diagram = getDiagramById(diagramId);
+      if (diagram) {
+        setCode(diagram.code);
+        setLastSavedCode(diagram.code);
+        setIsSaved(true);
+        setCurrentDiagramId(diagramId);
+        
+        toast({
+          title: "Diagram loaded",
+          description: `Loaded "${diagram.title}"`,
+        });
+      }
+    } else if (templateId) {
       const template = templates.find(t => t.id === templateId);
       if (template) {
         setCode(template.code);
         setLastSavedCode(template.code);
         setIsSaved(true);
+        setCurrentDiagramId(null);
         
         toast({
           title: "Template loaded",
@@ -51,7 +68,7 @@ const EditorPage = () => {
         });
       }
     }
-  }, [searchParams]);
+  }, [searchParams, getDiagramById]);
 
   // Track save state when code changes
   useEffect(() => {
@@ -88,11 +105,21 @@ const EditorPage = () => {
       return;
     }
 
-    // Detect diagram type
+    // If editing existing diagram, update it directly
+    if (currentDiagramId) {
+      const type = detectDiagramType(code);
+      updateDiagram(currentDiagramId, {
+        code,
+        type,
+      });
+      setLastSavedCode(code);
+      setIsSaved(true);
+      return;
+    }
+
+    // Otherwise, detect diagram type and open save dialog for new diagram
     const type = detectDiagramType(code);
     setDetectedType(type);
-    
-    // Open save dialog
     setShowSaveDialog(true);
   };
 
@@ -113,6 +140,8 @@ const EditorPage = () => {
       addDiagram(diagramData);
 
       // Update local state
+      const newId = addDiagram(diagramData);
+      setCurrentDiagramId(newId);
       setLastSavedCode(code);
       setIsSaved(true);
       setShowSaveDialog(false);

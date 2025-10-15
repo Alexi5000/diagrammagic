@@ -44,6 +44,9 @@ export default function Navigation() {
             <Link to="/editor" className="text-slate-300 hover:text-white transition-colors">
               Editor
             </Link>
+            <Link to="/my-diagrams" className="text-slate-300 hover:text-white transition-colors">
+              My Diagrams
+            </Link>
             <Button 
               asChild
               className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white font-medium shadow-lg shadow-blue-500/50"
@@ -72,6 +75,9 @@ export default function Navigation() {
             </a>
             <Link to="/editor" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
               Editor
+            </Link>
+            <Link to="/my-diagrams" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+              My Diagrams
             </Link>
             <Button 
               asChild
