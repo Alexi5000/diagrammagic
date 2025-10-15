@@ -240,6 +240,23 @@ export interface EditorProps {
 }
 
 /**
+ * Code Editor component props with tabs and AI generation
+ */
+export interface CodeEditorProps {
+  /** Current Mermaid code */
+  value: string;
+  
+  /** Code change handler */
+  onChange: (value: string) => void;
+  
+  /** Optional className */
+  className?: string;
+  
+  /** Show line numbers in code editor */
+  showLineNumbers?: boolean;
+}
+
+/**
  * Preview component props
  */
 export interface PreviewProps {

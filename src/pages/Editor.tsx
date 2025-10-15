@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Toolbar from '@/components/editor/Toolbar';
-import Editor from '@/components/Editor';
+import CodeEditor from '@/components/editor/CodeEditor';
 import Preview from '@/components/Preview';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { initMermaid } from '@/lib/mermaidConfig';
@@ -128,10 +128,11 @@ const EditorPage = () => {
       <main className="flex-1 container py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
           <div className="glass-panel p-6 animate-slide-in">
-            <Editor 
+            <CodeEditor 
               value={code} 
               onChange={setCode} 
               className="h-full"
+              showLineNumbers={false}
             />
           </div>
           
