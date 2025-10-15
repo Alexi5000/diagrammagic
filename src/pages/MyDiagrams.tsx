@@ -19,7 +19,7 @@ type SortOption = 'recent' | 'alphabetical' | 'type';
 
 const MyDiagrams = () => {
   const navigate = useNavigate();
-  const { diagrams, deleteDiagram, isLoading } = useDiagramStore();
+  const { diagrams, deleteDiagram, updateDiagram, isLoading } = useDiagramStore();
   
   const [sortBy, setSortBy] = useState<SortOption>('recent');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -49,6 +49,10 @@ const MyDiagrams = () => {
 
   const handleEdit = (id: string) => {
     navigate(`/editor?diagram=${id}`);
+  };
+
+  const handleTitleUpdate = (id: string, newTitle: string) => {
+    updateDiagram(id, { title: newTitle });
   };
 
   const handleDeleteClick = (id: string) => {
@@ -139,12 +143,13 @@ const MyDiagrams = () => {
               "animate-fade-in"
             )}>
               {sortedDiagrams.map((diagram) => (
-                <DiagramCard 
-                  key={diagram.id}
-                  diagram={diagram}
-                  onDelete={handleDeleteClick}
-                  onEdit={handleEdit}
-                />
+              <DiagramCard 
+                key={diagram.id}
+                diagram={diagram}
+                onDelete={handleDeleteClick}
+                onEdit={handleEdit}
+                onTitleUpdate={handleTitleUpdate}
+              />
               ))}
             </div>
           )}
