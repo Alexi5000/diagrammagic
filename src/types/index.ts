@@ -285,6 +285,39 @@ export interface ApiKeyInputProps {
 }
 
 /**
+ * Toolbar component props
+ * Props for the editor toolbar with actions
+ */
+export interface ToolbarProps {
+  /** Save handler */
+  onSave: () => void;
+  
+  /** Save state indicator */
+  isSaved?: boolean;
+  
+  /** Export handler */
+  onExport: () => void;
+  
+  /** Template selection handler */
+  onTemplateSelect: (template: Template) => void;
+  
+  /** Clear diagram handler */
+  onClear: () => void;
+  
+  /** Dark mode state */
+  isDarkMode: boolean;
+  
+  /** Theme toggle handler */
+  toggleTheme: () => void;
+  
+  /** Settings handler */
+  onSettings: () => void;
+  
+  /** Optional className */
+  className?: string;
+}
+
+/**
  * Generic API error structure
  */
 export interface ApiError {
