@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Toolbar from '@/components/editor/Toolbar';
 import CodeEditor from '@/components/editor/CodeEditor';
 import PreviewPanel from '@/components/editor/PreviewPanel';
+import SaveDiagramDialog from '@/components/editor/SaveDiagramDialog';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { initMermaid } from '@/lib/mermaidConfig';
 import { exportDiagramAsSVG } from '@/lib/exportSVG';
+import { detectDiagramType, generateDefaultTitle } from '@/lib/detectDiagramType';
+import { useDiagramStore } from '@/hooks/useDiagramStore';
 import { sampleDiagrams } from '@/data/sampleDiagrams';
-import { Template } from '@/types';
+import { Template, DiagramType } from '@/types';
 import { toast } from '@/hooks/use-toast';
 
 const EditorPage = () => {
+  const { addDiagram } = useDiagramStore();
+  
   const [code, setCode] = useState<string>(sampleDiagrams[0].code);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(true);
@@ -17,6 +22,9 @@ const EditorPage = () => {
   const [showClearConfirm, setShowClearConfirm] = useState<boolean>(false);
   const [showTemplateConfirm, setShowTemplateConfirm] = useState<boolean>(false);
   const [pendingTemplate, setPendingTemplate] = useState<Template | null>(null);
+  const [showSaveDialog, setShowSaveDialog] = useState<boolean>(false);
+  const [detectedType, setDetectedType] = useState<DiagramType>('flowchart');
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   // Initialize theme on component mount
   useEffect(() => {
@@ -49,14 +57,52 @@ const EditorPage = () => {
   };
 
   const handleSave = () => {
-    // Save to localStorage
-    localStorage.setItem('saved-diagram', code);
-    setLastSavedCode(code);
-    setIsSaved(true);
-    toast({
-      title: "Diagram saved",
-      description: "Your diagram has been saved successfully.",
-    });
+    // Validate code is not empty
+    if (!code.trim()) {
+      toast({
+        title: "Cannot save",
+        description: "Please add some diagram code before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Detect diagram type
+    const type = detectDiagramType(code);
+    setDetectedType(type);
+    
+    // Open save dialog
+    setShowSaveDialog(true);
+  };
+
+  const handleSaveConfirm = async (data: { title: string; description?: string; tags: string[] }) => {
+    try {
+      setIsSaving(true);
+
+      // Create diagram object
+      const diagramData = {
+        title: data.title,
+        code,
+        type: detectedType,
+        description: data.description,
+        tags: data.tags,
+      };
+
+      // Save to store
+      addDiagram(diagramData);
+
+      // Update local state
+      setLastSavedCode(code);
+      setIsSaved(true);
+      setShowSaveDialog(false);
+
+      // Success toast is handled by useDiagramStore
+    } catch (error) {
+      console.error('Save error:', error);
+      // Error toast is handled by useDiagramStore
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleExport = () => {
@@ -141,6 +187,16 @@ const EditorPage = () => {
           </div>
         </div>
       </main>
+
+      {/* Save Dialog */}
+      <SaveDiagramDialog
+        open={showSaveDialog}
+        onOpenChange={setShowSaveDialog}
+        onSave={handleSaveConfirm}
+        defaultTitle={generateDefaultTitle(detectedType)}
+        diagramType={detectedType}
+        isSaving={isSaving}
+      />
 
       {/* Confirm Dialogs */}
       <ConfirmDialog
