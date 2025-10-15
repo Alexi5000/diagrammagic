@@ -274,6 +274,20 @@ export interface PreviewProps {
 }
 
 /**
+ * PreviewPanel component props
+ */
+export interface PreviewPanelProps {
+  /** Mermaid code to render */
+  code: string;
+  
+  /** Dark mode state */
+  isDarkMode?: boolean;
+  
+  /** Optional className */
+  className?: string;
+}
+
+/**
  * AI Prompt component props
  */
 export interface AIPromptProps {

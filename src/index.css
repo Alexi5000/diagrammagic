@@ -127,6 +127,14 @@
   .diagram-container {
     @apply p-6 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-lg shadow-sm;
   }
+  
+  .mermaid-container {
+    @apply p-6 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-lg shadow-sm;
+  }
+  
+  .mermaid-container svg {
+    @apply max-w-full h-auto;
+  }
 }
 
 /* Custom scrollbar styles */

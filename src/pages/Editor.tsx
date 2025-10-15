@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Toolbar from '@/components/editor/Toolbar';
 import CodeEditor from '@/components/editor/CodeEditor';
-import Preview from '@/components/Preview';
+import PreviewPanel from '@/components/editor/PreviewPanel';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { initMermaid } from '@/lib/mermaidConfig';
 import { exportDiagramAsSVG } from '@/lib/exportSVG';
@@ -137,7 +137,7 @@ const EditorPage = () => {
           </div>
           
           <div className="glass-panel p-6 animate-slide-in" style={{ animationDelay: '100ms' }}>
-            <Preview code={code} className="h-full" isDarkMode={isDarkMode} />
+            <PreviewPanel code={code} className="h-full" isDarkMode={isDarkMode} />
           </div>
         </div>
       </main>
