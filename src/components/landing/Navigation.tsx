@@ -41,6 +41,9 @@ export default function Navigation() {
             <a href="#stats" className="text-slate-300 hover:text-white transition-colors">
               Stats
             </a>
+            <Link to="/templates" className="text-slate-300 hover:text-white transition-colors">
+              Templates
+            </Link>
             <Link to="/editor" className="text-slate-300 hover:text-white transition-colors">
               Editor
             </Link>
@@ -73,6 +76,9 @@ export default function Navigation() {
             <a href="#stats" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
               Stats
             </a>
+            <Link to="/templates" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+              Templates
+            </Link>
             <Link to="/editor" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
               Editor
             </Link>
