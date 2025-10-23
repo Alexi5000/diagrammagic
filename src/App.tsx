@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
 import Landing from "./pages/Landing";
-import Index from "./pages/Index";
+import Editor from "./pages/Editor";
 import Templates from "./pages/Templates";
 import MyDiagrams from "./pages/MyDiagrams";
 import NotFound from "./pages/NotFound";
@@ -44,7 +44,7 @@ const AppContent = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/editor" element={<Index />} />
+          <Route path="/editor" element={<Editor />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/my-diagrams" element={<MyDiagrams />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
