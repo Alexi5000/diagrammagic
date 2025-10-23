@@ -2,14 +2,27 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Key, Check, X } from "lucide-react";
+import { Key, Check, X, AlertTriangle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ApiKeyInputProps } from '@/types';
 
 const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ className, onKeySaved }) => {
   const [apiKey, setApiKey] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [showSecurityDialog, setShowSecurityDialog] = useState<boolean>(false);
+  const [pendingApiKey, setPendingApiKey] = useState<string>('');
 
   // Load API key from localStorage on mount
   useEffect(() => {
@@ -40,13 +53,26 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ className, onKeySaved }) => {
       return;
     }
 
-    localStorage.setItem('openai_api_key', apiKey);
+    // Show security warning dialog before saving
+    setPendingApiKey(apiKey);
+    setShowSecurityDialog(true);
+  };
+
+  const handleConfirmSave = () => {
+    localStorage.setItem('openai_api_key', pendingApiKey);
     setIsSaved(true);
     setIsVisible(false);
+    setShowSecurityDialog(false);
+    setPendingApiKey('');
     toast({
       title: "API Key Saved",
       description: "Your OpenAI API key has been saved locally",
     });
+  };
+
+  const handleCancelSave = () => {
+    setShowSecurityDialog(false);
+    setPendingApiKey('');
   };
 
   const handleRemoveKey = () => {
@@ -60,19 +86,30 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ className, onKeySaved }) => {
   };
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center">
-          <Key className="h-4 w-4 mr-2 text-slate-500" />
-          <span className="text-sm font-medium">OpenAI API Key</span>
-        </div>
-        {isSaved && (
-          <div className="flex items-center text-xs text-green-600 dark:text-green-400">
-            <Check className="h-3 w-3 mr-1" />
-            Saved
+    <>
+      <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800">
+        {/* Security Warning Banner */}
+        <Alert variant="destructive" className="mb-4">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Security Notice</AlertTitle>
+          <AlertDescription className="text-sm">
+            API keys are stored in your browser's localStorage (not encrypted). This is suitable for testing only. 
+            Browser extensions and XSS vulnerabilities could access your key. For production use, implement a backend proxy.
+          </AlertDescription>
+        </Alert>
+
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            <Key className="h-4 w-4 mr-2 text-slate-500" />
+            <span className="text-sm font-medium">OpenAI API Key</span>
           </div>
-        )}
-      </div>
+          {isSaved && (
+            <div className="flex items-center text-xs text-green-600 dark:text-green-400">
+              <Check className="h-3 w-3 mr-1" />
+              Saved
+            </div>
+          )}
+        </div>
 
       {isVisible ? (
         <div className="space-y-2">
@@ -109,7 +146,43 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ className, onKeySaved }) => {
           )}
         </div>
       )}
-    </div>
+      </div>
+
+      {/* Security Confirmation Dialog */}
+      <AlertDialog open={showSecurityDialog} onOpenChange={setShowSecurityDialog}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-destructive">
+              <AlertTriangle className="h-5 w-5" />
+              Security Warning: Client-Side Key Storage
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3 text-sm">
+              <p className="font-semibold">Your API key will be stored in browser localStorage where it can be accessed by:</p>
+              <ul className="list-disc list-inside space-y-1 pl-2">
+                <li>Browser extensions you've installed</li>
+                <li>Any JavaScript code on this page</li>
+                <li>XSS vulnerabilities (if any exist)</li>
+              </ul>
+              <p className="font-semibold text-destructive">
+                Your OpenAI API key is linked to billing. Only proceed if this is for testing or demo purposes.
+              </p>
+              <p className="text-xs text-muted-foreground">
+                For production applications, implement a backend proxy to store API keys securely on the server.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelSave}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleConfirmSave}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              I Understand, Save Anyway
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
