@@ -14,6 +14,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, X } from 'lucide-react';
 import { DiagramType } from '@/types';
+import { DiagramTitleSchema, DiagramDescriptionSchema, TagSchema } from '@/lib/validation';
+import { z } from 'zod';
+import { toast } from '@/components/ui/use-toast';
 
 interface SaveDiagramDialogProps {
   open: boolean;
@@ -49,9 +52,29 @@ const SaveDiagramDialog: React.FC<SaveDiagramDialogProps> = ({
 
   const handleAddTag = () => {
     const trimmedTag = tagInput.trim().toLowerCase();
-    if (trimmedTag && !tags.includes(trimmedTag)) {
-      setTags([...tags, trimmedTag]);
-      setTagInput('');
+    
+    // Validate tag
+    try {
+      TagSchema.parse(trimmedTag);
+      
+      if (!tags.includes(trimmedTag)) {
+        setTags([...tags, trimmedTag]);
+        setTagInput('');
+      } else {
+        toast({
+          title: "Duplicate Tag",
+          description: "This tag has already been added",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Invalid Tag",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -68,12 +91,25 @@ const SaveDiagramDialog: React.FC<SaveDiagramDialogProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim()) {
+    
+    // Validate all inputs
+    try {
+      const validatedTitle = DiagramTitleSchema.parse(title);
+      const validatedDescription = DiagramDescriptionSchema.parse(description);
+      
       onSave({
-        title: title.trim(),
-        description: description.trim() || undefined,
+        title: validatedTitle,
+        description: validatedDescription || undefined,
         tags,
       });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Validation Error",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      }
     }
   };
 

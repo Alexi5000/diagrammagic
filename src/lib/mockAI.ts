@@ -12,6 +12,7 @@ import {
   getExampleByType, 
 } from '@/data/aiExamples';
 import type { DiagramType } from '@/types';
+import { logger } from '@/lib/logger';
 
 /**
  * Keyword mapping for diagram type detection
@@ -91,7 +92,7 @@ export async function generateDiagram(prompt: string): Promise<string> {
 
   const normalizedPrompt = prompt.toLowerCase().trim();
   
-  console.log('Mock AI: Processing prompt:', prompt);
+  logger.debug('Mock AI: Processing prompt');
 
   // Simulate API delay (1.5 seconds)
   await new Promise(resolve => setTimeout(resolve, 1500));
@@ -100,7 +101,7 @@ export async function generateDiagram(prompt: string): Promise<string> {
   const searchResults = searchExamples(prompt);
   
   if (searchResults.length > 0) {
-    console.log('Mock AI: Found exact match:', searchResults[0].title);
+    logger.debug('Mock AI: Found exact match');
     return searchResults[0].generatedCode;
   }
 
@@ -108,7 +109,7 @@ export async function generateDiagram(prompt: string): Promise<string> {
   for (const [type, keywords] of Object.entries(KEYWORDS)) {
     for (const keyword of keywords) {
       if (normalizedPrompt.includes(keyword)) {
-        console.log(`Mock AI: Matched keyword "${keyword}" for type "${type}"`);
+        logger.debug(`Mock AI: Matched keyword for type "${type}"`);
         
         const examples = getExampleByType(type as DiagramType);
         
@@ -117,7 +118,7 @@ export async function generateDiagram(prompt: string): Promise<string> {
           const simpleExample = examples.find(ex => ex.complexity === 'simple');
           const selectedExample = simpleExample || examples[0];
           
-          console.log('Mock AI: Using example:', selectedExample.title);
+          logger.debug('Mock AI: Using matched example');
           return selectedExample.generatedCode;
         }
       }
@@ -125,7 +126,7 @@ export async function generateDiagram(prompt: string): Promise<string> {
   }
 
   // Step 3: Ultimate fallback - generic diagram
-  console.log('Mock AI: No matches found, using fallback diagram');
+  logger.debug('Mock AI: Using fallback diagram');
   return FALLBACK_DIAGRAM;
 }
 

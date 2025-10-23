@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Diagram, DiagramType } from '@/types';
 import { initMermaid } from '@/lib/mermaidConfig';
 import { exportDiagramAsSVG } from '@/lib/exportSVG';
+import { logger } from '@/lib/logger';
 import { 
   Loader2, 
   FileQuestion, 
@@ -111,7 +112,7 @@ export const DiagramCard: React.FC<DiagramCardProps> = ({
         setSvg(renderedSvg);
         setError(false);
       } catch (err) {
-        console.error('Diagram preview render error:', err);
+        logger.error('Diagram preview render error:', err);
         setError(true);
       } finally {
         setLoading(false);

@@ -1,5 +1,6 @@
 import { saveAs } from 'file-saver';
 import { showSuccess, showError } from '@/lib/toast';
+import { logger } from '@/lib/logger';
 
 /**
  * SVG Export Helper
@@ -207,18 +208,14 @@ export function exportDiagramAsSVG(
     }
 
     // Log in development
-    if (import.meta.env.DEV) {
-      console.log(`[exportSVG] Successfully exported: ${filename}`);
-    }
+    logger.debug(`Successfully exported: ${filename}`);
   } catch (error) {
     // Handle known errors
     if (error instanceof SVGNotFoundError) {
       if (config.showToast) {
         showError('Export failed', 'No diagram to export');
       }
-      if (import.meta.env.DEV) {
-        console.error('[exportSVG] SVG not found:', error);
-      }
+      logger.error('SVG not found:', error);
       throw error;
     }
 
@@ -226,9 +223,7 @@ export function exportDiagramAsSVG(
       if (config.showToast) {
         showError('Export failed', 'Failed to serialize diagram');
       }
-      if (import.meta.env.DEV) {
-        console.error('[exportSVG] Serialization error:', error);
-      }
+      logger.error('Serialization error:', error);
       throw error;
     }
 
@@ -236,9 +231,7 @@ export function exportDiagramAsSVG(
     if (config.showToast) {
       showError('Export failed', 'An unexpected error occurred');
     }
-    if (import.meta.env.DEV) {
-      console.error('[exportSVG] Unexpected error:', error);
-    }
+    logger.error('Unexpected error:', error);
     throw error;
   }
 }

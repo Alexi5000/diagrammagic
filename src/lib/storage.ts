@@ -8,6 +8,7 @@
  */
 
 import { Diagram } from '@/types';
+import { logger } from '@/lib/logger';
 
 // ==================== Constants ====================
 
@@ -102,7 +103,7 @@ export function getDiagrams(): Diagram[] {
     const parsed = JSON.parse(data);
     
     if (!Array.isArray(parsed)) {
-      console.warn('Stored data is not an array, resetting storage');
+      logger.warn('Stored data is not an array, resetting storage');
       return [];
     }
 
@@ -110,7 +111,7 @@ export function getDiagrams(): Diagram[] {
     const validDiagrams = parsed.filter(isValidDiagram);
     
     if (validDiagrams.length !== parsed.length) {
-      console.warn(`Filtered out ${parsed.length - validDiagrams.length} corrupted diagram(s)`);
+      logger.warn(`Filtered out ${parsed.length - validDiagrams.length} corrupted diagram(s)`);
     }
 
     // Sort by most recently updated first
@@ -118,14 +119,14 @@ export function getDiagrams(): Diagram[] {
       new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     );
   } catch (error) {
-    console.error('Failed to parse diagrams from localStorage:', error);
+    logger.error('Failed to parse diagrams from localStorage:', error);
     
     // Backup corrupted data for debugging
     const corruptedData = localStorage.getItem(STORAGE_KEY);
     if (corruptedData) {
       try {
         localStorage.setItem(`${STORAGE_KEY}_corrupted_backup`, corruptedData);
-        console.info('Corrupted data backed up to localStorage');
+        logger.info('Corrupted data backed up to localStorage');
       } catch {
         // Ignore backup errors
       }

@@ -4,6 +4,9 @@
  */
 
 import { generateDiagram as generateMockDiagram } from '@/lib/mockAI';
+import { AIPromptSchema } from '@/lib/validation';
+import { logger } from '@/lib/logger';
+import { z } from 'zod';
 
 const API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 
@@ -14,6 +17,16 @@ const shouldUseMock = () => {
 };
 
 export const generateMermaidDiagram = async (prompt: string): Promise<string> => {
+  // Validate prompt input
+  try {
+    AIPromptSchema.parse(prompt);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw new Error(error.errors[0].message);
+    }
+    throw error;
+  }
+
   if (shouldUseMock()) {
     return await generateMockDiagram(prompt);
   }
@@ -24,7 +37,7 @@ export const generateMermaidDiagram = async (prompt: string): Promise<string> =>
       throw new Error('API key is required. Please add your OpenAI API key.');
     }
 
-    console.log('Sending request to OpenAI with prompt:', prompt);
+    logger.debug('Sending request to OpenAI API');
     const response = await fetch(API_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -73,7 +86,7 @@ export const generateMermaidDiagram = async (prompt: string): Promise<string> =>
     // Fallback to the entire response if no backticks found
     return generatedText;
   } catch (error) {
-    console.error('Error in API call:', error);
+    logger.error('Error in API call:', error);
     throw new Error(error instanceof Error ? error.message : 'Failed to generate diagram. Please try again later.');
   }
 };

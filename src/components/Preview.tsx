@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PreviewProps } from '@/types';
 import { initMermaid } from '@/lib/mermaidConfig';
+import { logger } from '@/lib/logger';
 
 const Preview: React.FC<PreviewProps> = ({ code, className, isDarkMode = false }) => {
   const [svg, setSvg] = useState<string>('');
@@ -34,7 +35,7 @@ const Preview: React.FC<PreviewProps> = ({ code, className, isDarkMode = false }
         const { svg } = await mermaid.render('mermaid-diagram', code);
         setSvg(svg);
       } catch (err) {
-        console.error('Mermaid rendering error:', err);
+        logger.error('Mermaid rendering error:', err);
         setError(err instanceof Error ? err.message : 'Failed to render diagram');
         setSvg('');
       } finally {
