@@ -8,6 +8,7 @@ import { Template } from '@/types';
 import { initMermaid } from '@/lib/mermaidConfig';
 import { Loader2, FileQuestion } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface TemplateCardProps {
   template: Template;
@@ -57,7 +58,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template, className 
         setSvg(renderedSvg);
         setError(false);
       } catch (err) {
-        console.error('Template preview render error:', err);
+        logger.error('❌ TemplateCard: Preview render failed', { templateId: template.id, error: err });
         setError(true);
       } finally {
         setLoading(false);
@@ -68,7 +69,13 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template, className 
   }, [template.code, template.id]);
 
   const handleUseTemplate = () => {
-    // Navigate to editor with template ID
+    logger.info('🎨 TemplateCard: User clicked "Use Template"', {
+      templateId: template.id,
+      templateName: template.name,
+      category: template.category,
+      targetUrl: `/editor?template=${template.id}`
+    });
+    
     navigate(`/editor?template=${template.id}`);
   };
 

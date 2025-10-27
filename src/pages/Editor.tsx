@@ -13,6 +13,8 @@ import { sampleDiagrams } from '@/data/sampleDiagrams';
 import { templates } from '@/data/templates';
 import { Template, DiagramType } from '@/types';
 import { toast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
+import { TOKENS } from '@/config';
 
 const EditorPage = () => {
   const { addDiagram, updateDiagram, getDiagramById } = useDiagramStore();
@@ -41,9 +43,24 @@ const EditorPage = () => {
     const diagramId = searchParams.get('diagram');
     const templateId = searchParams.get('template');
     
+    logger.debug('🔍 Editor: URL params checked', { 
+      diagramId, 
+      templateId,
+      currentRoute: window.location.pathname + window.location.search
+    });
+    
     if (diagramId) {
+      logger.debug('📄 Editor: Loading saved diagram', { diagramId });
       const diagram = getDiagramById(diagramId);
+      
       if (diagram) {
+        logger.info('✅ Editor: Diagram loaded successfully', { 
+          id: diagramId, 
+          title: diagram.title,
+          codeLength: diagram.code.length,
+          type: diagram.type
+        });
+        
         setCode(diagram.code);
         setLastSavedCode(diagram.code);
         setIsSaved(true);
@@ -53,10 +70,53 @@ const EditorPage = () => {
           title: "Diagram loaded",
           description: `Loaded "${diagram.title}"`,
         });
+      } else {
+        logger.error('❌ Editor: Diagram not found in store', { 
+          requestedId: diagramId,
+          availableDiagrams: Object.keys(localStorage).filter(k => k.includes('diagram'))
+        });
+        
+        toast({
+          title: "Diagram not found",
+          description: "The requested diagram could not be found.",
+          variant: "destructive",
+        });
       }
     } else if (templateId) {
+      logger.debug('🎨 Editor: Loading template', { 
+        requestedId: templateId,
+        totalTemplatesAvailable: templates.length,
+        availableTemplateIds: templates.map(t => t.id)
+      });
+      
       const template = templates.find(t => t.id === templateId);
+      
       if (template) {
+        // Validate template has code
+        if (!template.code || template.code.trim().length === 0) {
+          logger.error('❌ Editor: Template has empty code', { 
+            templateId: template.id,
+            templateName: template.name,
+            category: template.category
+          });
+          
+          toast({
+            title: "Invalid template",
+            description: "This template has no diagram code.",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        logger.info('✅ Editor: Template found and loaded', { 
+          id: template.id,
+          name: template.name,
+          category: template.category,
+          type: template.type,
+          codeLength: template.code.length,
+          difficulty: template.difficulty
+        });
+        
         setCode(template.code);
         setLastSavedCode(template.code);
         setIsSaved(true);
@@ -66,7 +126,22 @@ const EditorPage = () => {
           title: "Template loaded",
           description: `Loaded "${template.name}" template`,
         });
+      } else {
+        logger.error('❌ Editor: Template not found', { 
+          requestedId: templateId,
+          availableIds: templates.map(t => t.id),
+          totalTemplates: templates.length,
+          categories: [...new Set(templates.map(t => t.category))]
+        });
+        
+        toast({
+          title: "Template not found",
+          description: `Template "${templateId}" could not be found. Please select a valid template.`,
+          variant: "destructive",
+        });
       }
+    } else {
+      logger.debug('📝 Editor: No URL params, showing default diagram');
     }
   }, [searchParams, getDiagramById]);
 
@@ -91,7 +166,8 @@ const EditorPage = () => {
     // Re-render the diagram with the new theme
     const currentCode = code;
     setCode('');
-    setTimeout(() => setCode(currentCode), 10);
+      setTimeout(() => setCode(currentCode), TOKENS.TIMING.TIMEOUT_THEME_SWITCH);
+      logger.debug('🎨 Editor: Theme switched, re-rendering diagram', { isDarkMode: newDarkMode });
   };
 
   const handleSave = () => {
@@ -148,7 +224,7 @@ const EditorPage = () => {
 
       // Success toast is handled by useDiagramStore
     } catch (error) {
-      console.error('Save error:', error);
+      logger.error('❌ Editor: Save failed', { error });
       // Error toast is handled by useDiagramStore
     } finally {
       setIsSaving(false);
@@ -232,7 +308,7 @@ const EditorPage = () => {
             />
           </div>
           
-          <div className="glass-panel p-6 animate-slide-in" style={{ animationDelay: '100ms' }}>
+          <div className="glass-panel p-6 animate-slide-in" style={{ animationDelay: `${TOKENS.TIMING.ANIMATION_DELAY_PANEL}ms` }}>
             <PreviewPanel code={code} className="h-full" isDarkMode={isDarkMode} />
           </div>
         </div>

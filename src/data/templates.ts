@@ -705,3 +705,29 @@ export const getTemplateStats = () => {
     averageUsage: Math.round(templates.reduce((sum, t) => sum + t.usageCount, 0) / templates.length)
   };
 };
+
+// ==================== STARTUP VALIDATION ====================
+
+import { logger } from '@/lib/logger';
+
+// ✅ Validate templates array at module load
+if (templates.length === 0) {
+  logger.error('❌ CRITICAL: Templates array is empty!');
+} else {
+  const categoryCounts = {
+    business: templates.filter(t => t.category === 'business').length,
+    technical: templates.filter(t => t.category === 'technical').length,
+    education: templates.filter(t => t.category === 'education').length,
+  };
+  
+  logger.info('✅ Templates module loaded', {
+    totalTemplates: templates.length,
+    templateIds: templates.map(t => t.id),
+    categoryCounts,
+    difficulties: {
+      beginner: templates.filter(t => t.difficulty === 'beginner').length,
+      intermediate: templates.filter(t => t.difficulty === 'intermediate').length,
+      advanced: templates.filter(t => t.difficulty === 'advanced').length,
+    }
+  });
+}

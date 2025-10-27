@@ -67,3 +67,38 @@ Simply open [Lovable](https://lovable.dev/projects/e751f4c0-8ecf-4b68-92d9-99805
 ## I want to use a custom domain - is that possible?
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+
+## 🎨 Template System
+
+### How It Works
+
+1. **Template Library**: 12 pre-built diagrams in `src/data/templates.ts`
+2. **Navigation**: Click "Use Template" → `/editor?template={id}`
+3. **Loading**: Editor reads URL param and loads matching template
+4. **Validation**: Automated tests verify templates on every build
+
+### Debugging Template Issues
+
+**Open browser console and look for:**
+
+✅ **Success Flow:**
+```
+✅ Templates module loaded {totalTemplates: 12, ...}
+🎨 TemplateCard: User clicked "Use Template" {templateId: "tpl-business-funnel-003"}
+🔍 Editor: URL params checked {templateId: "tpl-business-funnel-003"}
+🎨 Editor: Loading template {totalTemplatesAvailable: 12}
+✅ Editor: Template found and loaded {name: "Sales Funnel Pipeline", codeLength: 847}
+```
+
+❌ **Failure Flow:**
+```
+❌ Editor: Template not found {requestedId: "invalid-id", availableIds: [...]}
+```
+
+### Adding New Templates
+
+1. Add to `templates` array in `src/data/templates.ts`
+2. Use format: `tpl-{category}-{name}-{number}`
+3. Include all required fields (id, name, description, code, type, category, difficulty)
+4. Run tests: `npm run test`
+5. Verify in browser console: Look for template ID in startup logs
