@@ -29,7 +29,6 @@ import {
   LogOut,
   Cloud,
   CloudOff,
-  Boxes,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Template } from '@/types';
@@ -122,9 +121,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <div className="flex items-center justify-between">
             {/* Left Section: Logo + Title (Links to Home) */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center group-hover:shadow-glow-violet transition-shadow">
-                <Boxes className="h-5 w-5 text-white" />
-              </div>
+              <img 
+                src="/favicon.png" 
+                alt="DiagramMagic Logo" 
+                className="h-9 w-9 rounded-xl group-hover:shadow-glow-violet transition-shadow"
+              />
               <h1 className="text-lg font-semibold text-slate-900 dark:text-white hidden sm:block group-hover:text-fuchsia-400 transition-colors">
                 DiagramMagic
               </h1>
