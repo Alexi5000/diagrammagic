@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { logger } from '@/lib/logger';
 import { GlassPanel } from './GlassPanel';
 import { AlertCircle, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,7 +36,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+    logger.error('❌ ErrorBoundary: React error caught', { error, errorInfo });
   }
 
   handleReset = () => {

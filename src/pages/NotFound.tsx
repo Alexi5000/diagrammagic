@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { logger } from '@/lib/logger';
 import { GlassPanel } from "@/components/shared/GlassPanel";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FileQuestion, Home } from "lucide-react";
@@ -8,10 +9,7 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
+    logger.error('❌ 404: Route not found', { path: location.pathname });
   }, [location.pathname]);
 
   return (

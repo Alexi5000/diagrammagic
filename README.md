@@ -52,13 +52,15 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Vite** - Lightning-fast build tool
+- **TypeScript** - Type-safe JavaScript
+- **React 18** - UI component library
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - Accessible UI components
+- **Mermaid.js** - Diagram rendering engine
+- **TanStack Query** - Data fetching and caching
 
 ## How can I deploy this project?
 
@@ -102,3 +104,39 @@ We don't support custom domains (yet). If you want to deploy your project under 
 3. Include all required fields (id, name, description, code, type, category, difficulty)
 4. Run tests: `npm run test`
 5. Verify in browser console: Look for template ID in startup logs
+
+## 🧪 Testing
+
+Run tests:
+
+```bash
+npm run test        # Run once
+npm run test:watch  # Watch mode
+```
+
+Test files follow the pattern `*.test.ts` or `*.spec.ts` and are placed alongside components or in `__tests__` directories.
+
+## 🔒 Security
+
+### Logging Strategy
+
+All logging uses the centralized logger (`src/lib/logger.ts`):
+- **Development:** All logs visible in console
+- **Production:** Only errors logged (prevents sensitive data exposure)
+- **ESLint enforced:** `no-console` rule prevents direct console usage
+
+### API Key Storage
+
+⚠️ **Demo/Testing Only:** API keys are stored in localStorage with explicit warnings.
+
+**For Production:** Use Lovable Cloud or backend proxy with server-side secrets.
+
+### Design Tokens
+
+All magic numbers are centralized in `src/config/tokens.ts`:
+- Timing values (debounce, animations)
+- Dimensions (icons, buttons)
+- Storage keys
+- Validation limits
+
+This ensures consistency and makes changes propagate automatically.

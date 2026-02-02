@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { Diagram } from '@/types';
 import {
   getDiagrams,
@@ -80,7 +81,7 @@ export function useDiagramStore(): UseDiagramStoreReturn {
         : 'Failed to load diagrams';
       setError(errorMessage);
       setDiagrams([]);
-      console.error('Error loading diagrams:', err);
+      logger.error('❌ DiagramStore: Load failed', { error: err });
     } finally {
       setIsLoading(false);
     }

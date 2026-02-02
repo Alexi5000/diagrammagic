@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
-  const debouncedOnChange = useRef<NodeJS.Timeout | null>(null);
+  const debouncedOnChange = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Update local value when prop changes
   useEffect(() => {
@@ -123,7 +124,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       // Clear prompt after successful generation
       setPromptValue('');
     } catch (error) {
-      console.error('Error generating diagram:', error);
+      logger.error('❌ CodeEditor: Generation failed', { error });
       toast({
         title: "Generation failed",
         description: error instanceof Error ? error.message : "Failed to generate diagram",
