@@ -23,7 +23,7 @@ const Dock = ({ items, className }: any) => (
 const dockItems = [
   { icon: <Home size={24} />, label: 'Home', href: '/' },
   { icon: <FileText size={24} />, label: 'Editor', href: '/editor' },
-  { icon: <BookOpen size={24} />, label: 'Docs', href: '#features' },
+  { icon: <BookOpen size={24} />, label: 'Mermaid Docs', href: 'https://mermaid.js.org' },
   { icon: <Github size={24} />, label: 'GitHub', href: 'https://github.com' },
 ];
 
@@ -49,9 +49,9 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Product</h3>
             <ul className="space-y-2">
-              <li><a href="#features" className="text-slate-400 hover:text-white transition-colors">Features</a></li>
+              <li><Link to="/templates" className="text-slate-400 hover:text-white transition-colors">Templates</Link></li>
               <li><Link to="/editor" className="text-slate-400 hover:text-white transition-colors">Editor</Link></li>
-              <li><a href="#stats" className="text-slate-400 hover:text-white transition-colors">Stats</a></li>
+              <li><Link to="/my-diagrams" className="text-slate-400 hover:text-white transition-colors">My Diagrams</Link></li>
             </ul>
           </div>
 

@@ -109,7 +109,7 @@ export function useDiagramStore(): UseDiagramStoreReturn {
       
       toast({
         title: 'Diagram saved',
-        description: `"${diagram.title}" has been saved successfully.`
+        description: `"${diagram.title}" saved. View it in My Diagrams.`
       });
       
       return id;

@@ -72,7 +72,7 @@ export default function Hero() {
           </MagneticButton>
           
           <MagneticButton variant="outline" asChild>
-            <a href="#templates">View Templates</a>
+            <Link to="/templates">View Templates</Link>
           </MagneticButton>
         </div>
       </div>
