@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -25,10 +25,16 @@ import {
   Sun,
   Moon,
   Settings,
+  User,
+  LogOut,
+  Cloud,
+  CloudOff,
+  Boxes,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Template } from '@/types';
 import { templates } from '@/data/templates';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ToolbarProps {
   onSave: () => void;
@@ -87,10 +93,18 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onSettings,
   className,
 }) => {
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
   // Group templates by category
   const businessTemplates = templates.filter(t => t.category === 'business');
   const technicalTemplates = templates.filter(t => t.category === 'technical');
   const educationTemplates = templates.filter(t => t.category === 'education');
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <TooltipProvider>
@@ -108,16 +122,27 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <div className="flex items-center justify-between">
             {/* Left Section: Logo + Title (Links to Home) */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-electric-blue to-neon-violet flex items-center justify-center group-hover:shadow-glow-blue transition-shadow">
-                <span className="text-white font-bold text-lg">M</span>
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center group-hover:shadow-glow-violet transition-shadow">
+                <Boxes className="h-5 w-5 text-white" />
               </div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white hidden sm:block group-hover:text-electric-blue transition-colors">
-                AI Diagram Creator
+              <h1 className="text-lg font-semibold text-slate-900 dark:text-white hidden sm:block group-hover:text-fuchsia-400 transition-colors">
+                DiagramMagic
               </h1>
             </Link>
 
             {/* Right Section: Action Buttons */}
             <div className="flex items-center gap-2">
+              {/* Cloud status indicator */}
+              <div className={cn(
+                "hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full text-xs",
+                user 
+                  ? "bg-green-500/10 text-green-400" 
+                  : "bg-amber-500/10 text-amber-400"
+              )}>
+                {user ? <Cloud className="h-3 w-3" /> : <CloudOff className="h-3 w-3" />}
+                <span>{user ? 'Cloud' : 'Local'}</span>
+              </div>
+
               {/* Save Button */}
               <IconButtonWithTooltip
                 icon={isSaved ? BookmarkCheck : Bookmark}
@@ -241,13 +266,39 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 ariaLabel="Toggle theme"
               />
 
-              {/* Settings Button */}
-              <IconButtonWithTooltip
-                icon={Settings}
-                tooltip="Settings"
-                onClick={onSettings}
-                ariaLabel="Open settings"
-              />
+              {/* User Menu or Sign In */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuLabel className="text-xs text-muted-foreground truncate">
+                      {user.email}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={onSettings}>
+                      <Settings className="h-4 w-4 mr-2" />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut} className="text-red-500">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate('/auth')}
+                  className="text-fuchsia-400 hover:text-fuchsia-300"
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         </div>

@@ -107,6 +107,7 @@
 /* Font imports */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap');
 
 /* Custom styles */
 @layer components {
@@ -117,6 +118,40 @@
   .glass-button {
     @apply bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 
     rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:bg-white/90 dark:hover:bg-white/20;
+  }
+
+  /* New glass styles for landing page */
+  .glass-nav {
+    background: rgba(5, 5, 5, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card {
+    background: rgba(20, 20, 20, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .glass-card:hover {
+    border-color: rgba(216, 70, 239, 0.3);
+  }
+
+  /* Text gradients */
+  .text-gradient-primary {
+    background: linear-gradient(to right, #e879f9, #a855f7, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: gradientMove 5s linear infinite;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
   }
   
   .editor-container {
