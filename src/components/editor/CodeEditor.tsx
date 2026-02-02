@@ -3,16 +3,12 @@ import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Loader2, Settings } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import ApiKeyInput from '@/components/ApiKeyInput';
+import { Sparkles, Loader2, LogIn } from "lucide-react";
 import { generateMermaidDiagram } from '@/utils/api';
 import { toast } from "@/hooks/use-toast";
 import { CodeEditorProps } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
@@ -20,11 +16,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   className,
   showLineNumbers = false
 }) => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'code' | 'prompt'>('code');
   const [promptValue, setPromptValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [localValue, setLocalValue] = useState(value);
-  const [apiKeyPopoverOpen, setApiKeyPopoverOpen] = useState(false);
   const [lineCount, setLineCount] = useState(1);
   
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -118,7 +114,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       
       toast({
         title: "Diagram generated",
-        description: "Your diagram has been generated successfully",
+        description: user ? "Your diagram has been generated using AI" : "Demo diagram generated (sign in for full AI)",
       });
       
       // Clear prompt after successful generation
@@ -224,22 +220,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
                   )}
                 </Button>
                 
-                {/* Settings Button */}
-                <Popover open={apiKeyPopoverOpen} onOpenChange={setApiKeyPopoverOpen}>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" size="icon" className="h-9 w-9" aria-label="API key settings">
-                      <Settings className="h-4 w-4" />
+                {/* Sign in prompt for guests */}
+                {!user && (
+                  <Link to="/auth">
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <LogIn className="h-4 w-4" />
+                      Sign in for full AI
                     </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80 p-0">
-                    <ApiKeyInput />
-                  </PopoverContent>
-                </Popover>
+                  </Link>
+                )}
               </div>
               
               {/* Model Info */}
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Using GPT-4o-mini
+                {user ? 'Using GPT-4o-mini' : 'Demo mode (sign in for GPT-4o-mini)'}
               </p>
             </div>
           </div>
