@@ -35,17 +35,8 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-slate-300 hover:text-white transition-colors">
-              Features
-            </a>
-            <a href="#stats" className="text-slate-300 hover:text-white transition-colors">
-              Stats
-            </a>
             <Link to="/templates" className="text-slate-300 hover:text-white transition-colors">
               Templates
-            </Link>
-            <Link to="/editor" className="text-slate-300 hover:text-white transition-colors">
-              Editor
             </Link>
             <Link to="/my-diagrams" className="text-slate-300 hover:text-white transition-colors">
               My Diagrams
@@ -54,7 +45,7 @@ export default function Navigation() {
               asChild
               className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white font-medium shadow-lg shadow-blue-500/50"
             >
-              <Link to="/editor">Get Started</Link>
+              <Link to="/editor">Start Creating</Link>
             </Button>
           </div>
 
@@ -70,17 +61,8 @@ export default function Navigation() {
         {/* Mobile Menu */}
         {mobileOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-4 animate-fade-in">
-            <a href="#features" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
-              Features
-            </a>
-            <a href="#stats" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
-              Stats
-            </a>
             <Link to="/templates" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
               Templates
-            </Link>
-            <Link to="/editor" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
-              Editor
             </Link>
             <Link to="/my-diagrams" className="block text-slate-300 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
               My Diagrams
@@ -89,7 +71,7 @@ export default function Navigation() {
               asChild
               className="w-full bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white font-medium"
             >
-              <Link to="/editor">Get Started</Link>
+              <Link to="/editor">Start Creating</Link>
             </Button>
           </div>
         )}

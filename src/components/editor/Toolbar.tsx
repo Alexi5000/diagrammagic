@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -105,15 +106,15 @@ const Toolbar: React.FC<ToolbarProps> = ({
       >
         <div className="container max-w-full px-6 py-3">
           <div className="flex items-center justify-between">
-            {/* Left Section: Logo + Title */}
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-electric-blue to-neon-violet flex items-center justify-center">
+            {/* Left Section: Logo + Title (Links to Home) */}
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-electric-blue to-neon-violet flex items-center justify-center group-hover:shadow-glow-blue transition-shadow">
                 <span className="text-white font-bold text-lg">M</span>
               </div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white hidden sm:block">
+              <h1 className="text-lg font-semibold text-slate-900 dark:text-white hidden sm:block group-hover:text-electric-blue transition-colors">
                 AI Diagram Creator
               </h1>
-            </div>
+            </Link>
 
             {/* Right Section: Action Buttons */}
             <div className="flex items-center gap-2">

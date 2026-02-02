@@ -20,8 +20,8 @@ test.describe('Landing Page', () => {
   test('Start Creating button navigates to editor', async ({ page }) => {
     await page.goto('/');
     
-    // Click the primary CTA
-    await page.getByRole('link', { name: /start creating/i }).click();
+    // Click the primary CTA in hero section (first one)
+    await page.getByRole('link', { name: /start creating/i }).first().click();
     
     // Should navigate to editor
     await expect(page).toHaveURL(/\/editor/);

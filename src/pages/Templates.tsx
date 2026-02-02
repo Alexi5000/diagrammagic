@@ -6,7 +6,7 @@ import { GlassPanel } from '@/components/shared/GlassPanel';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Filter, FileText } from 'lucide-react';
+import { Search, Filter, FileText, Plus } from 'lucide-react';
 import Navigation from '@/components/landing/Navigation';
 import Footer from '@/components/landing/Footer';
 
@@ -78,9 +78,16 @@ export default function Templates() {
                 Templates
               </span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-6">
               Start with professionally crafted Mermaid diagrams. Browse by category, difficulty, or search for what you need.
             </p>
+            <Button
+              onClick={() => navigate('/editor')}
+              className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white font-medium shadow-lg shadow-blue-500/50"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Start from Scratch
+            </Button>
           </div>
 
           {/* Filters Section */}
