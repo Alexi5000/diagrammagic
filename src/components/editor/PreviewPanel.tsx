@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import mermaid from 'mermaid';
 import { Loader2, AlertCircle, FileText } from 'lucide-react';
 import { initMermaid } from '@/lib/mermaidConfig';
@@ -14,7 +15,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ code, isDarkMode = false, c
   const [svg, setSvg] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const renderCountRef = useRef<number>(0);
 
   // Initialize Mermaid with theme
@@ -53,7 +54,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ code, isDarkMode = false, c
         setSvg(renderedSvg);
         setError('');
       } catch (err) {
-        console.error('Mermaid render error:', err);
+        logger.error('❌ PreviewPanel: Render failed', { error: err });
         const errorMessage = err instanceof Error ? err.message : 'Failed to render diagram';
         setError(errorMessage);
         setSvg('');

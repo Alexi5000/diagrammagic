@@ -24,6 +24,17 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "@typescript-eslint/no-unused-vars": "off",
+      
+      // 🚫 Prevent console usage (forces use of logger)
+      "no-console": ["error", { allow: [] }],
+      
+      // 🚫 Warn on magic numbers (forces use of TOKENS)
+      "no-magic-numbers": ["warn", {
+        ignore: [0, 1, -1, 2, 100],
+        ignoreArrayIndexes: true,
+        enforceConst: true,
+        detectObjects: false
+      }]
     },
   }
 );

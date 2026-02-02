@@ -300,7 +300,7 @@ export function clearAllDiagrams(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {
-    console.error('Failed to clear diagrams:', error);
+    logger.error('❌ Storage: Clear failed', { error });
     throw new StorageError('Failed to clear all diagrams');
   }
 }

@@ -1,6 +1,7 @@
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MagneticButton } from '@/components/shared/MagneticButton';
 import { Link } from 'react-router-dom';
+import { TOKENS } from '@/config/tokens';
 
 // React Bits components - install with:
 // npx jsrepo add https://reactbits.dev/tailwind/Backgrounds/Hyperspeed
@@ -20,10 +21,10 @@ export default function Hero() {
       {/* Hyperspeed Background */}
       <Hyperspeed 
         className="absolute inset-0 -z-10"
-        particleCount={isMobile ? 50 : 100}
-        speed={2}
+        particleCount={isMobile ? TOKENS.PARTICLES.MOBILE : TOKENS.PARTICLES.DESKTOP}
+        speed={TOKENS.PARTICLES.SPEED}
         color="#3B82F6"
-        particleSize={2}
+        particleSize={TOKENS.PARTICLES.SIZE}
       />
       
       {/* Gradient Overlay */}
@@ -35,7 +36,7 @@ export default function Hero() {
         <SplitText 
           text="Transform Ideas Into"
           className="text-5xl md:text-7xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-400 bg-clip-text text-transparent mb-4"
-          delay={50}
+          delay={TOKENS.SPLIT_TEXT.DELAY_MS}
           animationFrom={{ 
             opacity: 0, 
             y: -20, 
@@ -46,16 +47,16 @@ export default function Hero() {
             y: 0, 
             filter: 'blur(0px)' 
           }}
-          duration={0.5}
+          duration={TOKENS.SPLIT_TEXT.DURATION_SEC}
         />
         
         {/* Accent Text with ShinyText */}
         <ShinyText 
           text="Beautiful Diagrams"
           className="text-5xl md:text-7xl font-black text-electric-blue mb-8"
-          shimmerWidth={200}
-          speed={3}
-          shimmerColor="rgba(255, 255, 255, 0.8)"
+          shimmerWidth={TOKENS.SHIMMER.WIDTH}
+          speed={TOKENS.SHIMMER.SPEED}
+          shimmerColor={TOKENS.SHIMMER.COLOR}
         />
         
         {/* Subtitle */}
