@@ -1,618 +1,248 @@
 
 
-# 🚀 MVP Production Readiness - Complete Implementation Plan
+# 🎯 Expert UX Audit - "Don't Make Me Think" Analysis
 
 ## Executive Summary
 
-**Security Status:** ✅ CLEAN (No security issues found)
-
-After comprehensive audit, the MVP is structurally sound. This plan covers:
-1. **Unit Tests** - CodeEditor, PreviewPanel, Storage utilities
-2. **E2E Tests** - Landing page and Editor flow verification
-3. **Fix Missing Test Scripts** - package.json needs `test` and `test:watch` commands
-4. **Production Deployment** - Ready after verification
+After conducting a comprehensive UX audit of the AI Diagram Creator Pro, I've identified **9 critical UX issues** that violate Steve Krug's core principles of web usability. This plan provides actionable fixes prioritized by impact.
 
 ---
 
-## Pre-Implementation Evidence
+## 📊 Current State Assessment
 
-| Component | Status | Test Coverage |
-|-----------|--------|---------------|
-| `vitest.config.ts` | ✅ Exists | Configured correctly |
-| `src/test/setup.ts` | ✅ Exists | Has matchMedia + ResizeObserver polyfills |
-| `tsconfig.app.json` | ✅ Has vitest types | `"types": ["vitest/globals"]` |
-| `package.json` scripts | ❌ MISSING | No `test` or `test:watch` commands |
-| Security scan | ✅ Clean | No issues found |
-| Templates test | ✅ Exists | 7 tests in `templates.test.ts` |
-| E2E directory | ❌ Empty | No Playwright tests |
+### Navigation Mental Model Analysis
+
+| Element | Current State | Krug Principle Violated |
+|---------|---------------|-------------------------|
+| **Navigation Items** | 5 links + 1 CTA button | ⚠️ Too many choices at top-level |
+| **"Editor" vs "Get Started"** | Both go to `/editor` | ❌ Redundant cognitive load |
+| **"Features" and "Stats"** | Anchor links on landing | ⚠️ Mix of page navigation + anchors |
+| **Hero CTA: "View Templates"** | Links to `#templates` (BROKEN) | ❌ 404/dead link - section doesn't exist |
+| **Dock Footer** | "Docs" links to `#features` | ⚠️ Misleading label |
 
 ---
 
-## Phase 1: Fix Package.json Test Scripts
+## 🔴 Critical Issues (Must Fix)
 
-**Issue:** Unit tests cannot run without npm scripts.
+### Issue 1: Dead Link in Hero CTA
+**Location:** `src/components/landing/Hero.tsx:75`
+```tsx
+<a href="#templates">View Templates</a>
+```
+**Problem:** No `#templates` section exists on landing page. This is a **broken promise** to users.
 
-**Changes to `package.json`:**
-```json
-{
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
-  }
-}
+**Fix:** Change to `/templates` route:
+```tsx
+<Link to="/templates">View Templates</Link>
 ```
 
 ---
 
-## Phase 2: Storage Utility Unit Tests
+### Issue 2: Duplicate Navigation ("Editor" + "Get Started")
+**Location:** `src/components/landing/Navigation.tsx:47-57`
 
-**New File:** `src/lib/__tests__/storage.test.ts`
+**Problem:** Two navigation items lead to the same `/editor` page:
+- "Editor" link (line 47-48)
+- "Get Started" button (line 53-58)
 
-### Test Cases:
-1. **getDiagrams** - Returns empty array when no data
-2. **getDiagrams** - Returns sorted diagrams (most recent first)
-3. **getDiagrams** - Filters out corrupted entries
-4. **saveDiagram** - Creates new diagram with timestamps
-5. **saveDiagram** - Updates existing diagram, preserves createdAt
-6. **saveDiagram** - Throws StorageQuotaExceededError on quota exceeded
-7. **updateDiagram** - Updates fields correctly
-8. **updateDiagram** - Throws DiagramNotFoundError for missing ID
-9. **deleteDiagram** - Removes diagram from storage
-10. **deleteDiagram** - Throws DiagramNotFoundError for missing ID
-11. **clearAllDiagrams** - Removes all diagrams
-12. **searchDiagrams** - Finds by title, description, tags
-13. **getFavoriteDiagrams** - Returns only favorites
-14. **exportDiagrams** - Creates valid JSON export
-15. **importDiagrams** - Merges with existing diagrams
-16. **getStorageStats** - Returns correct statistics
+**Krug Principle:** "Don't make me think" - users should not have to choose between identical options.
 
-```typescript
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import {
-  getDiagrams,
-  saveDiagram,
-  updateDiagram,
-  deleteDiagram,
-  clearAllDiagrams,
-  searchDiagrams,
-  getFavoriteDiagrams,
-  getDiagramById,
-  exportDiagrams,
-  importDiagrams,
-  getStorageStats,
-  DiagramNotFoundError,
-  StorageQuotaExceededError
-} from '../storage';
-import { Diagram } from '@/types';
+**Fix:** Remove "Editor" link, keep only "Get Started" CTA. The button is higher-signal.
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { store = {}; },
-  };
-})();
+---
 
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+### Issue 3: Misleading Footer Dock
+**Location:** `src/components/landing/Footer.tsx:26`
+```tsx
+{ icon: <BookOpen />, label: 'Docs', href: '#features' }
+```
+**Problem:** "Docs" label links to Features section - not documentation.
 
-const createMockDiagram = (overrides?: Partial<Diagram>): Diagram => ({
-  id: crypto.randomUUID(),
-  title: 'Test Diagram',
-  code: 'graph TD\n  A-->B',
-  type: 'flowchart',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  tags: ['test'],
-  ...overrides,
-});
+**Fix:** Either:
+1. Link to actual Mermaid docs: `https://mermaid.js.org`
+2. Or rename to "Features"
 
-describe('Storage Utilities', () => {
-  beforeEach(() => {
-    localStorageMock.clear();
-  });
+---
 
-  describe('getDiagrams', () => {
-    it('returns empty array when no data', () => {
-      expect(getDiagrams()).toEqual([]);
-    });
+### Issue 4: Inconsistent Link Types in Navigation
+**Problem:** Navigation mixes:
+- Anchor links (`#features`, `#stats`) 
+- Page routes (`/templates`, `/editor`, `/my-diagrams`)
 
-    it('returns sorted diagrams (most recent first)', () => {
-      const older = createMockDiagram({ 
-        id: '1', 
-        updatedAt: '2024-01-01T00:00:00Z' 
-      });
-      const newer = createMockDiagram({ 
-        id: '2', 
-        updatedAt: '2024-12-01T00:00:00Z' 
-      });
-      saveDiagram(older);
-      saveDiagram(newer);
-      
-      const diagrams = getDiagrams();
-      expect(diagrams[0].id).toBe('2');
-      expect(diagrams[1].id).toBe('1');
-    });
-  });
+**Krug Principle:** Consistent patterns reduce cognitive load.
 
-  describe('saveDiagram', () => {
-    it('creates new diagram with timestamps', () => {
-      const diagram = createMockDiagram();
-      saveDiagram(diagram);
-      
-      const saved = getDiagramById(diagram.id);
-      expect(saved).toBeDefined();
-      expect(saved?.title).toBe(diagram.title);
-    });
+**Fix:** Remove in-page anchor links from main nav. Features and Stats are visible by scrolling.
 
-    it('updates existing diagram, preserves createdAt', () => {
-      const original = createMockDiagram({ 
-        createdAt: '2024-01-01T00:00:00Z' 
-      });
-      saveDiagram(original);
-      
-      const updated = { ...original, title: 'Updated Title' };
-      saveDiagram(updated);
-      
-      const result = getDiagramById(original.id);
-      expect(result?.title).toBe('Updated Title');
-      expect(result?.createdAt).toBe('2024-01-01T00:00:00Z');
-    });
-  });
+---
 
-  describe('updateDiagram', () => {
-    it('updates fields correctly', () => {
-      const diagram = createMockDiagram();
-      saveDiagram(diagram);
-      
-      updateDiagram(diagram.id, { title: 'New Title' });
-      
-      const result = getDiagramById(diagram.id);
-      expect(result?.title).toBe('New Title');
-    });
+## 🟠 Medium Priority Issues
 
-    it('throws DiagramNotFoundError for missing ID', () => {
-      expect(() => updateDiagram('non-existent', { title: 'Test' }))
-        .toThrow(DiagramNotFoundError);
-    });
-  });
+### Issue 5: Editor Has No Back Navigation
+**Location:** `src/pages/Editor.tsx` + `src/components/editor/Toolbar.tsx`
 
-  describe('deleteDiagram', () => {
-    it('removes diagram from storage', () => {
-      const diagram = createMockDiagram();
-      saveDiagram(diagram);
-      
-      deleteDiagram(diagram.id);
-      
-      expect(getDiagramById(diagram.id)).toBeNull();
-    });
+**Problem:** Once in Editor, users cannot return to landing or other pages without browser back button.
 
-    it('throws DiagramNotFoundError for missing ID', () => {
-      expect(() => deleteDiagram('non-existent'))
-        .toThrow(DiagramNotFoundError);
-    });
-  });
-
-  describe('clearAllDiagrams', () => {
-    it('removes all diagrams', () => {
-      saveDiagram(createMockDiagram());
-      saveDiagram(createMockDiagram());
-      
-      clearAllDiagrams();
-      
-      expect(getDiagrams()).toEqual([]);
-    });
-  });
-
-  describe('searchDiagrams', () => {
-    it('finds by title', () => {
-      saveDiagram(createMockDiagram({ title: 'Login Flow' }));
-      saveDiagram(createMockDiagram({ title: 'Dashboard' }));
-      
-      const results = searchDiagrams('login');
-      expect(results).toHaveLength(1);
-      expect(results[0].title).toBe('Login Flow');
-    });
-
-    it('finds by tags', () => {
-      saveDiagram(createMockDiagram({ tags: ['auth', 'security'] }));
-      
-      const results = searchDiagrams('auth');
-      expect(results).toHaveLength(1);
-    });
-  });
-
-  describe('getFavoriteDiagrams', () => {
-    it('returns only favorites', () => {
-      saveDiagram(createMockDiagram({ isFavorite: true }));
-      saveDiagram(createMockDiagram({ isFavorite: false }));
-      
-      const favorites = getFavoriteDiagrams();
-      expect(favorites).toHaveLength(1);
-    });
-  });
-
-  describe('exportDiagrams / importDiagrams', () => {
-    it('exports and imports correctly', () => {
-      const diagram = createMockDiagram();
-      saveDiagram(diagram);
-      
-      const exported = exportDiagrams();
-      clearAllDiagrams();
-      
-      importDiagrams(exported);
-      
-      expect(getDiagrams()).toHaveLength(1);
-    });
-  });
-
-  describe('getStorageStats', () => {
-    it('returns correct statistics', () => {
-      saveDiagram(createMockDiagram({ type: 'flowchart', isFavorite: true }));
-      saveDiagram(createMockDiagram({ type: 'sequence', isFavorite: false }));
-      
-      const stats = getStorageStats();
-      expect(stats.count).toBe(2);
-      expect(stats.favorites).toBe(1);
-      expect(stats.byType.flowchart).toBe(1);
-      expect(stats.byType.sequence).toBe(1);
-    });
-  });
-});
+**Fix:** Add home/back link to Toolbar logo:
+```tsx
+<Link to="/" className="flex items-center gap-3">
+  {/* Logo */}
+</Link>
 ```
 
 ---
 
-## Phase 3: Validation Schema Unit Tests
+### Issue 6: Templates Page Has No "Create from Scratch" Option
+**Location:** `src/pages/Templates.tsx`
 
-**New File:** `src/lib/__tests__/validation.test.ts`
+**Problem:** Users browsing templates may want to start fresh, but there's no CTA for blank editor.
 
-### Test Cases:
-1. **DiagramTitleSchema** - Valid titles pass
-2. **DiagramTitleSchema** - Empty string fails
-3. **DiagramTitleSchema** - Too long fails (>100 chars)
-4. **DiagramTitleSchema** - Invalid characters fail
-5. **DiagramDescriptionSchema** - Valid description passes
-6. **DiagramDescriptionSchema** - Too long fails (>500 chars)
-7. **TagSchema** - Valid tags pass
-8. **TagSchema** - Invalid characters fail
-9. **AIPromptSchema** - Valid prompts pass
-10. **AIPromptSchema** - Too short fails (<3 chars)
-11. **AIPromptSchema** - Too long fails (>1000 chars)
-12. **DiagramCodeSchema** - Valid code passes
-13. **DiagramCodeSchema** - Empty fails
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import {
-  DiagramTitleSchema,
-  DiagramDescriptionSchema,
-  TagSchema,
-  AIPromptSchema,
-  DiagramCodeSchema
-} from '../validation';
-
-describe('Validation Schemas', () => {
-  describe('DiagramTitleSchema', () => {
-    it('accepts valid titles', () => {
-      expect(() => DiagramTitleSchema.parse('My Flowchart')).not.toThrow();
-      expect(() => DiagramTitleSchema.parse('Login Flow (v2)')).not.toThrow();
-    });
-
-    it('rejects empty strings', () => {
-      expect(() => DiagramTitleSchema.parse('')).toThrow();
-      expect(() => DiagramTitleSchema.parse('   ')).toThrow();
-    });
-
-    it('rejects titles over 100 characters', () => {
-      const longTitle = 'a'.repeat(101);
-      expect(() => DiagramTitleSchema.parse(longTitle)).toThrow();
-    });
-
-    it('rejects invalid characters', () => {
-      expect(() => DiagramTitleSchema.parse('Test<script>')).toThrow();
-      expect(() => DiagramTitleSchema.parse('Test{injection}')).toThrow();
-    });
-  });
-
-  describe('DiagramDescriptionSchema', () => {
-    it('accepts valid descriptions', () => {
-      expect(() => DiagramDescriptionSchema.parse('A simple flowchart')).not.toThrow();
-      expect(() => DiagramDescriptionSchema.parse('')).not.toThrow();
-    });
-
-    it('rejects descriptions over 500 characters', () => {
-      const longDesc = 'a'.repeat(501);
-      expect(() => DiagramDescriptionSchema.parse(longDesc)).toThrow();
-    });
-  });
-
-  describe('TagSchema', () => {
-    it('accepts valid tags', () => {
-      expect(() => TagSchema.parse('flowchart')).not.toThrow();
-      expect(() => TagSchema.parse('my-tag')).not.toThrow();
-      expect(() => TagSchema.parse('tag123')).not.toThrow();
-    });
-
-    it('rejects invalid characters', () => {
-      expect(() => TagSchema.parse('Tag With Spaces')).toThrow();
-      expect(() => TagSchema.parse('TAG')).toThrow(); // uppercase
-    });
-  });
-
-  describe('AIPromptSchema', () => {
-    it('accepts valid prompts', () => {
-      expect(() => AIPromptSchema.parse('Create a flowchart')).not.toThrow();
-    });
-
-    it('rejects prompts under 3 characters', () => {
-      expect(() => AIPromptSchema.parse('ab')).toThrow();
-    });
-
-    it('rejects prompts over 1000 characters', () => {
-      const longPrompt = 'a'.repeat(1001);
-      expect(() => AIPromptSchema.parse(longPrompt)).toThrow();
-    });
-  });
-
-  describe('DiagramCodeSchema', () => {
-    it('accepts valid code', () => {
-      expect(() => DiagramCodeSchema.parse('graph TD\n  A-->B')).not.toThrow();
-    });
-
-    it('rejects empty code', () => {
-      expect(() => DiagramCodeSchema.parse('')).toThrow();
-      expect(() => DiagramCodeSchema.parse('   ')).toThrow();
-    });
-  });
-});
-```
+**Fix:** Add "Start from Scratch" button in the empty state or header area.
 
 ---
 
-## Phase 4: E2E Tests - Landing Page & Editor Flows
+### Issue 7: My Diagrams Has No Visual Connection to Editor
+**Problem:** After creating a diagram, users must navigate manually to "My Diagrams". No visual feedback of success.
 
-**New File:** `e2e/landing-and-editor.spec.ts`
+**Current Flow:**
+1. Create diagram in Editor
+2. Save → Toast appears briefly
+3. User must find "My Diagrams" link
 
-### Test Cases:
-1. **Landing Page** - Loads with hero section visible
-2. **Landing Page** - Navigation links work
-3. **Landing Page** - "Start Creating" navigates to editor
-4. **Editor Page** - Loads with default diagram
-5. **Editor Page** - Code editor accepts input
-6. **Editor Page** - Preview renders valid Mermaid
-7. **Editor Page** - Shows error for invalid syntax
-8. **Editor Page** - Theme toggle works
-9. **Templates Page** - Loads templates grid
-10. **Templates Page** - Clicking template navigates to editor
-
-```typescript
-import { test, expect } from "../playwright-fixture";
-
-test.describe('Landing Page', () => {
-  test('loads with hero section visible', async ({ page }) => {
-    await page.goto('/');
-    
-    // Hero headline should be visible
-    await expect(page.getByText('Transform Ideas Into')).toBeVisible();
-    await expect(page.getByText('Beautiful Diagrams')).toBeVisible();
-  });
-
-  test('navigation links are functional', async ({ page }) => {
-    await page.goto('/');
-    
-    // Check navigation links exist
-    await expect(page.getByRole('link', { name: /templates/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /my diagrams/i })).toBeVisible();
-  });
-
-  test('Start Creating button navigates to editor', async ({ page }) => {
-    await page.goto('/');
-    
-    // Click the primary CTA
-    await page.getByRole('link', { name: /start creating/i }).click();
-    
-    // Should navigate to editor
-    await expect(page).toHaveURL(/\/editor/);
-  });
-});
-
-test.describe('Editor Page', () => {
-  test('loads with code editor visible', async ({ page }) => {
-    await page.goto('/editor');
-    
-    // Code editor textarea should be visible
-    await expect(page.getByRole('textbox', { name: /mermaid diagram code editor/i })).toBeVisible();
-  });
-
-  test('code editor accepts input', async ({ page }) => {
-    await page.goto('/editor');
-    
-    const editor = page.getByRole('textbox', { name: /mermaid diagram code editor/i });
-    await editor.clear();
-    await editor.fill('graph TD\n  A[Start] --> B[End]');
-    
-    await expect(editor).toHaveValue('graph TD\n  A[Start] --> B[End]');
-  });
-
-  test('preview renders valid Mermaid diagram', async ({ page }) => {
-    await page.goto('/editor');
-    
-    const editor = page.getByRole('textbox', { name: /mermaid diagram code editor/i });
-    await editor.clear();
-    await editor.fill('graph TD\n  A[Start] --> B[End]');
-    
-    // Wait for debounced render (300ms) + rendering time
-    await page.waitForTimeout(500);
-    
-    // Should see rendered SVG (mermaid-container with SVG inside)
-    await expect(page.locator('.mermaid-container svg')).toBeVisible();
-  });
-
-  test('shows error for invalid Mermaid syntax', async ({ page }) => {
-    await page.goto('/editor');
-    
-    const editor = page.getByRole('textbox', { name: /mermaid diagram code editor/i });
-    await editor.clear();
-    await editor.fill('invalid mermaid syntax here');
-    
-    // Wait for debounced render
-    await page.waitForTimeout(500);
-    
-    // Should show syntax error
-    await expect(page.getByText(/syntax error/i)).toBeVisible();
-  });
-
-  test('AI Prompt tab is accessible', async ({ page }) => {
-    await page.goto('/editor');
-    
-    // Click AI Prompt tab
-    await page.getByRole('tab', { name: /ai prompt/i }).click();
-    
-    // Should see AI prompt textarea
-    await expect(page.getByRole('textbox', { name: /ai prompt input/i })).toBeVisible();
-    
-    // Should see Generate button
-    await expect(page.getByRole('button', { name: /generate/i })).toBeVisible();
-  });
-});
-
-test.describe('Templates Page', () => {
-  test('loads templates grid', async ({ page }) => {
-    await page.goto('/templates');
-    
-    // Should see template cards
-    await expect(page.getByText(/templates/i).first()).toBeVisible();
-  });
-
-  test('clicking Use Template navigates to editor', async ({ page }) => {
-    await page.goto('/templates');
-    
-    // Click first "Use Template" button
-    const useButton = page.getByRole('button', { name: /use template/i }).first();
-    await useButton.click();
-    
-    // Should navigate to editor with template param
-    await expect(page).toHaveURL(/\/editor\?template=/);
-  });
-});
-
-test.describe('My Diagrams Page', () => {
-  test('shows empty state when no diagrams', async ({ page }) => {
-    // Clear localStorage before test
-    await page.goto('/my-diagrams');
-    
-    // Should show empty state or diagram list
-    await expect(page.locator('body')).toBeVisible();
-  });
-});
-```
+**Fix:** After save success toast, include a link to "View in My Diagrams".
 
 ---
 
-## Phase 5: Run All Tests & Verify
+## 🟡 Polish Issues
 
-### Unit Tests Execution:
-```bash
-npm run test
-```
+### Issue 8: Footer Links Repeat Navigation
+**Location:** `src/components/landing/Footer.tsx:52-54`
 
-**Expected Output:**
-```
-✓ src/data/__tests__/templates.test.ts (7 tests)
-✓ src/lib/__tests__/storage.test.ts (16 tests)
-✓ src/lib/__tests__/validation.test.ts (13 tests)
+**Problem:** Footer has "Editor" link AND Dock has "Editor" icon. Redundant.
 
-Test Files  3 passed (3)
-Tests       36 passed (36)
-```
+**Krug Principle:** "Omit needless words" (and links).
 
-### E2E Tests Execution:
-```bash
-npx playwright test
-```
-
-**Expected Output:**
-```
-Running 10 tests using 1 worker
-
-✓ Landing Page › loads with hero section visible
-✓ Landing Page › navigation links are functional
-✓ Landing Page › Start Creating button navigates to editor
-✓ Editor Page › loads with code editor visible
-✓ Editor Page › code editor accepts input
-✓ Editor Page › preview renders valid Mermaid diagram
-✓ Editor Page › shows error for invalid Mermaid syntax
-✓ Editor Page › AI Prompt tab is accessible
-✓ Templates Page › loads templates grid
-✓ Templates Page › clicking Use Template navigates to editor
-
-10 passed (10)
-```
+**Fix:** Keep Dock, simplify footer to brand + copyright only.
 
 ---
 
-## Phase 6: Production Deployment
+### Issue 9: Mobile Menu Doesn't Auto-Close on Route Change
+**Location:** `src/components/landing/Navigation.tsx`
 
-After all tests pass, the MVP is ready for production deployment.
+**Problem:** While individual `onClick={() => setMobileOpen(false)}` exists, there's no cleanup on route change if user taps and quickly navigates.
 
-### Pre-Deployment Checklist:
-| Check | Status |
-|-------|--------|
-| Security scan clean | ✅ |
-| Unit tests pass | ⏳ (after implementation) |
-| E2E tests pass | ⏳ (after implementation) |
-| No console.error in codebase | ✅ |
-| No unused files | ✅ |
-| ESLint passes | ✅ |
-| Build succeeds | ⏳ (verify) |
-
-### Deployment Action:
-Click **Publish** → **Update** to deploy to production at `https://diagrammagic.lovable.app`
+**Status:** Already handled per-link, but should add `useEffect` cleanup for edge cases.
 
 ---
 
-## File Summary
+## 📐 Information Architecture - Simplified Proposal
 
-### Files to Create:
-1. `src/lib/__tests__/storage.test.ts` - 16 test cases
-2. `src/lib/__tests__/validation.test.ts` - 13 test cases
-3. `e2e/landing-and-editor.spec.ts` - 10 E2E test cases
+### Current Navigation (7 items)
+```text
+[Logo] Features | Stats | Templates | Editor | My Diagrams | [Get Started]
+```
 
-### Files to Modify:
-1. `package.json` - Add `test` and `test:watch` scripts
+### Proposed Navigation (4 items)
+```text
+[Logo] Templates | My Diagrams | [Start Creating]
+```
 
-### Total New Test Coverage:
-- **Unit Tests:** 36 tests (7 existing + 29 new)
-- **E2E Tests:** 10 tests
-- **Total:** 46 tests
-
----
-
-## Success Metrics
-
-| Metric | Target | Current |
-|--------|--------|---------|
-| Security issues | 0 | ✅ 0 |
-| Unit test coverage | 30+ tests | 7 → 36 |
-| E2E test coverage | 10+ tests | 0 → 10 |
-| Build status | Pass | ✅ |
-| Production ready | Yes | After tests pass |
+**Rationale:**
+- Features/Stats are on-page content (scroll, don't click)
+- "Editor" removed (redundant with CTA)
+- "Get Started" → "Start Creating" (more action-oriented)
 
 ---
 
-## Uncle Bob Principles Applied
+## 🎨 Mental Model Alignment
 
-✅ **Single Responsibility:** Each test file covers one module  
-✅ **Testable:** All business logic isolated and testable  
-✅ **Self-Documenting:** Test names describe expected behavior  
-✅ **DRY:** Mock helpers reused across tests  
-✅ **Clean Architecture:** Tests mirror source structure  
+### User Goals (High Signal)
+| Goal | Current Path | Optimal Path |
+|------|-------------|--------------|
+| **Create new diagram** | Click "Get Started" OR "Editor" | Single "Start Creating" button |
+| **Use a template** | Click "Templates" → Select → Use | ✅ Already optimal |
+| **View saved diagrams** | Click "My Diagrams" | ✅ Already optimal |
+| **Learn features** | Scroll down OR click "Features" | Scroll only (remove link) |
+
+### F-Pattern Reading Alignment
+The current hero follows F-pattern correctly:
+1. **Top-left:** Logo + brand ✅
+2. **Center:** Value proposition ✅
+3. **Primary CTA:** "Start Creating" ✅
+4. **Secondary CTA:** "View Templates" ❌ (currently broken)
+
+---
+
+## ✅ Recommended Implementation Order
+
+### Phase 1: Critical Fixes (Immediate)
+1. Fix broken `#templates` link in Hero → Change to `/templates`
+2. Remove redundant "Editor" from navigation
+3. Fix Footer Dock "Docs" label
+
+### Phase 2: Navigation Cleanup
+4. Remove anchor links (Features, Stats) from main nav
+5. Add home link to Editor toolbar logo
+6. Simplify footer (remove redundant links)
+
+### Phase 3: Flow Improvements
+7. Add "Start from Scratch" to Templates page
+8. Add "View in My Diagrams" link in save success toast
+9. Improve mobile menu edge case handling
+
+---
+
+## 📁 Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/components/landing/Hero.tsx` | Fix broken `#templates` → `/templates` |
+| `src/components/landing/Navigation.tsx` | Remove Editor link, Features, Stats anchors |
+| `src/components/landing/Footer.tsx` | Fix Dock "Docs" label, simplify links |
+| `src/components/editor/Toolbar.tsx` | Make logo link to home |
+| `src/pages/Templates.tsx` | Add "Start from Scratch" option |
+| `src/hooks/useDiagramStore.ts` | Enhance save toast with navigation link |
+
+---
+
+## 🎯 Success Metrics After Implementation
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Navigation items | 7 | 4 |
+| Broken links | 1 | 0 |
+| Redundant paths | 2 | 0 |
+| Clicks to create diagram | 1-2 | 1 |
+| Clicks to return home from Editor | Browser back | 1 click on logo |
+
+---
+
+## 🧠 Expert Consultation: Steve Krug Principles Applied
+
+### 1. "Don't make me think"
+- **Applied:** Single CTA for primary action
+- **Applied:** Remove choice between "Editor" and "Get Started"
+
+### 2. "Omit needless words"
+- **Applied:** Remove redundant navigation items
+- **Applied:** Simplified footer
+
+### 3. "Users don't read, they scan"
+- **Applied:** F-pattern hero layout preserved
+- **Applied:** Clear visual hierarchy in nav
+
+### 4. "Get rid of half the words on each page, then get rid of half of what's left"
+- **Applied:** Navigation reduced from 7 → 4 items
+- **Applied:** Footer simplified
+
+---
+
+## 🚀 Ready to Implement
+
+This plan provides:
+- **9 specific issues** identified with evidence
+- **Clear prioritization** (Critical → Medium → Polish)
+- **6 files** to modify
+- **Measurable success criteria**
+
+All changes follow First Principles UX and align with 2025 best practices for SaaS applications.
 
