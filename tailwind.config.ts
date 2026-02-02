@@ -23,7 +23,7 @@ export default {
 				sans: ['Inter var', 'Inter', 'sans-serif'],
 				mono: ['JetBrains Mono', 'monospace'],
 			},
-			colors: {
+		colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -67,7 +67,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Premium brand colors
+				// Premium brand colors - Fuchsia/Purple theme
+				fuchsia: {
+					DEFAULT: 'hsl(292, 84%, 61%)',
+					300: 'hsl(292, 91%, 83%)',
+					400: 'hsl(292, 91%, 73%)',
+					500: 'hsl(292, 84%, 61%)',
+					600: 'hsl(293, 69%, 49%)',
+				},
+				'diagram-purple': {
+					DEFAULT: 'hsl(271, 91%, 65%)',
+					600: 'hsl(271, 81%, 56%)',
+				},
+				'diagram-bg': '#020202',
+				// Legacy brand colors
 				'electric-blue': {
 					DEFAULT: '#3B82F6',
 					dark: '#2563EB',
