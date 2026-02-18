@@ -1,74 +1,149 @@
-# Welcome to your Lovable project
+<div align="center">
 
-## Project info
+<img src="assets/icon.png" alt="DiagramMagic Logo" width="120" />
 
-**URL**: https://lovable.dev/projects/e751f4c0-8ecf-4b68-92d9-99805a66e66e
+# DiagramMagic
 
-## How can I edit this code?
+### Describe It. Diagram It. Done.
 
-There are several ways of editing your application.
+**AI-powered diagram generation — type what you want in plain English, get production-ready Mermaid diagrams instantly.**
 
-**Use Lovable**
+[![Live App](https://img.shields.io/badge/Live-diagrammagic.lovable.app-ff69b4)](https://diagrammagic.lovable.app)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18-61dafb?logo=react)](https://react.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwindcss)](https://tailwindcss.com)
+[![Supabase](https://img.shields.io/badge/Supabase-Backend-3ecf8e?logo=supabase)](https://supabase.com)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e751f4c0-8ecf-4b68-92d9-99805a66e66e) and start prompting.
+[Try It Live](#-try-it-live) · [Features](#-features) · [Diagram Types](#-supported-diagram-types) · [Quick Start](#-quick-start) · [Templates](#-templates)
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+<img src="assets/cover.png" alt="DiagramMagic Editor" width="100%" />
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+</div>
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## The Problem
 
-Follow these steps:
+Creating diagrams is painful. Drag-and-drop tools are slow. Learning Mermaid syntax takes time. And when you need a quick flowchart for a meeting in 5 minutes, the last thing you want is to fight with a diagramming tool.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## The Solution
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+DiagramMagic lets you **describe any diagram in plain English** and generates production-ready Mermaid code instantly using AI. Edit the code, see the preview in real-time, export as SVG, and save to your library. No drag-and-drop. No learning curve. Just describe and done.
 
-# Step 3: Install the necessary dependencies.
-npm i
+> *"Create a user authentication flow with login, signup, password reset, and email verification"*
+>
+> One prompt. One diagram. Ready to use.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+---
+
+## Try It Live
+
+**[diagrammagic.lovable.app](https://diagrammagic.lovable.app)** — No signup required to try the editor.
+
+---
+
+## Features
+
+- **AI Diagram Generation** — Describe what you want in natural language, powered by OpenAI
+- **Live Code Editor** — Write or edit Mermaid syntax with instant preview rendering
+- **9 Diagram Types** — Flowcharts, sequence diagrams, class diagrams, ER diagrams, Gantt charts, pie charts, state diagrams, user journeys, and git graphs
+- **Template Library** — 12 professionally crafted templates across business, technical, and education categories
+- **SVG Export** — Export any diagram as a high-quality SVG for presentations, docs, or websites
+- **Save & Manage** — Save diagrams to your personal library with Supabase-backed persistence
+- **Dark/Light Mode** — Full theme support for comfortable editing
+- **3D Landing Page** — Immersive Three.js animated background on the landing page
+- **Authentication** — Supabase Auth for secure user accounts and diagram ownership
+- **E2E Testing** — Playwright test suite for critical user flows
+- **Responsive Design** — Works on desktop and tablet
+
+---
+
+## Supported Diagram Types
+
+| Type | Description | Use Case |
+|---|---|---|
+| **Flowchart** | Process flows with decisions and branches | Workflows, algorithms, decision trees |
+| **Sequence** | Interaction between actors over time | API calls, system communication, protocols |
+| **Class** | Object-oriented class relationships | Software design, data modeling |
+| **ER** | Entity-relationship diagrams | Database schema design |
+| **Gantt** | Timeline-based project schedules | Project planning, sprint timelines |
+| **Pie** | Proportional data visualization | Budget breakdowns, survey results |
+| **State** | State machine transitions | UI states, process lifecycles |
+| **Journey** | User experience journey maps | UX research, customer experience |
+| **Git** | Git branching and merge visualizations | Release strategies, branching models |
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **Node.js** >= 18
+- **npm** or **bun**
+
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/Alexi5000/diagrammagic.git
+cd diagrammagic
+npm install
+```
+
+### 2. Configure Environment
+
+```bash
+cp .env.example .env
+```
+
+Set your Supabase and OpenAI credentials in `.env`.
+
+### 3. Start Development Server
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:5173](http://localhost:5173) and start creating diagrams.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## Templates
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+DiagramMagic ships with **12 professionally crafted templates** organized by category:
 
-## What technologies are used for this project?
+### Business
+- SWOT Analysis Matrix
+- Customer Journey Map
+- Sales Pipeline Funnel
+- Organizational Chart
 
-This project is built with:
+### Technical
+- CI/CD Pipeline
+- Microservices Architecture
+- Database Schema (ER)
+- API Sequence Flow
 
-- **Vite** - Lightning-fast build tool
-- **TypeScript** - Type-safe JavaScript
-- **React 18** - UI component library
-- **Tailwind CSS** - Utility-first styling
-- **shadcn/ui** - Accessible UI components
-- **Mermaid.js** - Diagram rendering engine
-- **TanStack Query** - Data fetching and caching
+### Education
+- Learning Path Flowchart
+- Course Structure Gantt
+- Knowledge Domain Class Diagram
+- Student Journey Map
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/e751f4c0-8ecf-4b68-92d9-99805a66e66e) and click on Share -> Publish.
+## Tech Stack
 
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+| Layer | Technology |
+|---|---|
+| **Framework** | React 18 + Vite |
+| **Language** | TypeScript (strict mode) |
+| **Styling** | Tailwind CSS + Shadcn/UI + Radix |
+| **Diagrams** | Mermaid.js |
+| **AI** | OpenAI API (via Supabase Edge Functions) |
+| **Backend** | Supabase (Auth + Database + Edge Functions) |
+| **3D Effects** | Three.js |
+| **Testing** | Playwright (E2E) |
+| **Data Fetching** | TanStack Query |
 
 ## 🎨 Template System
 
