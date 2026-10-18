@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { GlassPanel } from './GlassPanel';
 import { LucideIcon } from 'lucide-react';
@@ -6,7 +7,7 @@ import { LucideIcon } from 'lucide-react';
 // npx jsrepo add https://reactbits.dev/tailwind/Animations/FadeContent
 
 // Placeholder component until FadeContent is installed
-const FadeContent = ({ children, animation, delay, threshold }: any) => <div>{children}</div>;
+const FadeContent = ({ children }: { children: ReactNode; animation: string; delay: number; threshold: number }) => <div>{children}</div>;
 
 interface FeatureCardProps {
   icon: LucideIcon;

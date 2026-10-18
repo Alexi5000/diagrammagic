@@ -7,7 +7,7 @@ import { Slot } from '@radix-ui/react-slot';
 // npx jsrepo add https://reactbits.dev/tailwind/Animations/Magnet
 
 // Placeholder component until Magnet is installed
-const Magnet = ({ children, strength, radius }: any) => <>{children}</>;
+const Magnet = ({ children }: { children: ReactNode; strength: number; radius: number }) => <>{children}</>;
 
 const magneticButtonVariants = cva(
   "inline-flex items-center justify-center font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",

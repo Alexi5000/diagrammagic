@@ -62,10 +62,17 @@ export class StorageQuotaExceededError extends StorageError {
  * @param obj - Object to validate
  * @returns True if object is a valid Diagram
  */
-function isValidDiagram(obj: any): obj is Diagram {
+function isValidDiagram(obj: unknown): obj is Diagram {
   return (
     typeof obj === 'object' &&
     obj !== null &&
+    'id' in obj &&
+    'title' in obj &&
+    'code' in obj &&
+    'type' in obj &&
+    'createdAt' in obj &&
+    'updatedAt' in obj &&
+    'tags' in obj &&
     typeof obj.id === 'string' &&
     typeof obj.title === 'string' &&
     typeof obj.code === 'string' &&
@@ -225,7 +232,7 @@ export function updateDiagram(id: string, updates: Partial<Diagram>): void {
   }
 
   // Prevent updating immutable fields
-  const { id: _, createdAt: __, ...safeUpdates } = updates as any;
+  const { id: _, createdAt: __, ...safeUpdates } = updates;
 
   const updatedDiagram: Diagram = {
     ...diagrams[existingIndex],
