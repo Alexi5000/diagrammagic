@@ -70,7 +70,13 @@ export async function updateCloudDiagram(
   id: string, 
   updates: Partial<Omit<Diagram, 'id' | 'createdAt'>>
 ): Promise<Diagram> {
-  const cloudUpdates: Record<string, unknown> = {};
+  const cloudUpdates: {
+    title?: string;
+    code?: string;
+    type?: string;
+    description?: string | null;
+    tags?: string[];
+  } = {};
   
   if (updates.title !== undefined) cloudUpdates.title = updates.title;
   if (updates.code !== undefined) cloudUpdates.code = updates.code;
