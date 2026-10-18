@@ -1,4 +1,4 @@
-import { Code2, LayoutTemplate, Users, Shield, Zap, Palette } from 'lucide-react';
+import { Code2, LayoutTemplate, Download, Code2 as SourceIcon, Zap, Palette } from 'lucide-react';
 
 const features = [
   {
@@ -12,31 +12,26 @@ const features = [
     B -->|No| D[End]`,
   },
   {
-    title: '500+ Templates',
+    title: 'Template Library',
     description: 'Start with professionally designed templates for flowcharts, sequences, ER diagrams, and more.',
     icon: LayoutTemplate,
     size: 'medium' as const,
   },
   {
-    title: 'Team Sync',
-    description: 'Collaborate in real-time with your team members.',
-    icon: Users,
-    size: 'small' as const,
-    avatars: [
-      'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
-      'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
-      'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
-    ],
-  },
-  {
-    title: 'Enterprise Ready',
-    description: 'SOC 2 compliant with advanced security features.',
-    icon: Shield,
+    title: 'SVG Export',
+    description: 'Download a rendered diagram as an SVG file.',
+    icon: Download,
     size: 'small' as const,
   },
   {
-    title: 'Lightning Fast',
-    description: 'AI-powered generation in under 2 seconds.',
+    title: 'Editable Source',
+    description: 'Review and adjust the Mermaid code behind each diagram.',
+    icon: SourceIcon,
+    size: 'small' as const,
+  },
+  {
+    title: 'Prompt to Diagram',
+    description: 'Use a text prompt to draft Mermaid syntax, then review the result.',
     icon: Zap,
     size: 'small' as const,
   },
@@ -112,22 +107,7 @@ export default function BentoFeatures() {
               <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
               <p className="text-white/50 text-sm">{feature.description}</p>
               
-              {/* Avatar stack for Team Sync */}
-              {feature.avatars && (
-                <div className="flex -space-x-2 mt-4">
-                  {feature.avatars.map((avatar, i) => (
-                    <img
-                      key={i}
-                      src={avatar}
-                      alt=""
-                      className="w-8 h-8 rounded-full border-2 border-[#020202]"
-                    />
-                  ))}
-                  <div className="w-8 h-8 rounded-full bg-fuchsia-500/20 border-2 border-[#020202] flex items-center justify-center text-xs text-fuchsia-400">
-                    +5
-                  </div>
-                </div>
-              )}
+
             </div>
           );
         })}

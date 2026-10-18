@@ -8,23 +8,23 @@ const faqs = [
   },
   {
     question: 'How does the AI generation work?',
-    answer: 'Simply describe your diagram in plain English, and our AI engine will parse your description using advanced NLP to generate the appropriate Mermaid syntax. You can then refine and customize the output.',
+    answer: 'Guest sessions use a simulated generator for demonstration. Signed-in generation uses a backend service when configured. Review and edit the Mermaid source before relying on the result.',
   },
   {
-    question: 'Can I use my own API key?',
-    answer: 'Yes! You can bring your own OpenAI API key for AI generation. Your API key is stored locally in your browser and never sent to our servers.',
+    question: 'Do I need an API key to try the editor?',
+    answer: 'No key is needed for the guest demonstration or editing Mermaid source. Signed-in generation depends on the configured backend service.',
   },
   {
     question: 'Are my diagrams stored securely?',
-    answer: 'Diagrams are stored in your account with enterprise-grade encryption. Guest users can also save diagrams locally in their browser storage.',
+    answer: 'Review the storage options in the editor before saving sensitive information. This site does not claim a security certification.',
   },
   {
     question: 'What export formats are available?',
-    answer: 'You can export diagrams as SVG (vector), PNG (raster), or copy the Mermaid code directly. SVG exports are perfect for presentations and documentation.',
+    answer: 'The editor exports SVG files. You can also copy the Mermaid source for use in your own documents.',
   },
   {
     question: 'Is there a free tier?',
-    answer: 'Yes! DiagramMagic offers a generous free tier with access to all diagram types, local storage, and limited AI generations per month.',
+    answer: 'You can open the editor and templates without purchasing a plan. Guest generation is a simulation, not a live AI service.',
   },
 ];
 

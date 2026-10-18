@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Users, Download, Star } from 'lucide-react';
+import { ArrowRight, Sparkles, Code2, Download, LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const stats = [
-  { icon: Users, value: '10k+', label: 'Users' },
-  { icon: Download, value: '1.2M', label: 'Exports' },
-  { icon: Star, value: '4.9/5', label: 'Rating' },
+  { icon: Code2, value: 'Mermaid', label: 'Source editor' },
+  { icon: Download, value: 'SVG', label: 'Export format' },
+  { icon: LayoutTemplate, value: 'Templates', label: 'Starting points' },
 ];
 
 export default function Hero() {
@@ -19,7 +19,7 @@ export default function Hero() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
           </span>
-          <span className="text-sm text-fuchsia-400 font-medium">AI Engine V2.0 Live</span>
+          <span className="text-sm text-fuchsia-400 font-medium">Mermaid diagram editor</span>
         </div>
 
         {/* Main Headline */}
@@ -34,8 +34,8 @@ export default function Hero() {
         
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
-          AI-powered diagram creation with Mermaid.js. Describe your ideas in plain English 
-          and watch them transform into professional diagrams in seconds.
+          Create diagrams with Mermaid source, templates, and an editable preview.
+          Guest generation is a simulation; live generation requires a configured backend.
         </p>
         
         {/* CTA Buttons */}
@@ -63,7 +63,7 @@ export default function Hero() {
         </div>
 
         {/* Stats Mini-Bar */}
-        <div className="inline-flex items-center gap-8 md:gap-12 px-8 py-4 rounded-2xl glass-card">
+        <div className="inline-flex flex-wrap justify-center items-center gap-8 md:gap-12 px-8 py-4 rounded-2xl glass-card">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (

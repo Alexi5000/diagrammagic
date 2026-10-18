@@ -4,24 +4,24 @@ const steps = [
   {
     number: '01',
     title: 'Describe It',
-    description: 'Simply describe your diagram in plain English. Our NLP engine understands complex relationships and structures.',
+    description: 'Start with a prompt, a template, or Mermaid source you can edit.',
     icon: Keyboard,
-    features: ['Natural language input', 'Context-aware parsing', 'Multi-language support'],
+    features: ['Prompt input', 'Editable source', 'Template starting points'],
   },
   {
     number: '02',
-    title: 'AI Generation',
-    description: 'Watch as our AI transforms your description into a beautiful, accurate diagram in seconds.',
+    title: 'Review the Diagram',
+    description: 'Guest generation is simulated. Review the preview and adjust the Mermaid source.',
     icon: Wand2,
-    features: ['Real-time preview', 'Smart suggestions', 'Auto-optimization'],
+    features: ['Diagram preview', 'Source editing', 'Manual review'],
     highlighted: true,
   },
   {
     number: '03',
     title: 'Export & Share',
-    description: 'Export your diagrams in multiple formats and share them with your team instantly.',
+    description: 'Download an SVG or copy the source for use in your own documents.',
     icon: Share2,
-    features: ['SVG, PNG, PDF', 'Direct link sharing', 'Team collaboration'],
+    features: ['SVG download', 'Mermaid source', 'Use in your documents'],
   },
 ];
 
