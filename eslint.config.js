@@ -26,7 +26,7 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
       
       // 🚫 Prevent console usage (forces use of logger)
-      "no-console": ["error", { allow: [] }],
+      "no-console": "error",
       
       // 🚫 Warn on magic numbers (forces use of TOKENS)
       "no-magic-numbers": ["warn", {
@@ -36,5 +36,13 @@ export default tseslint.config(
         detectObjects: false
       }]
     },
+  },
+  {
+    files: ["src/lib/logger.ts"],
+    rules: { "no-console": ["error", { allow: ["log", "error", "warn", "info"] }] },
+  },
+  {
+    files: ["supabase/functions/generate-diagram/index.ts"],
+    rules: { "no-console": ["error", { allow: ["log", "error"] }] },
   }
 );

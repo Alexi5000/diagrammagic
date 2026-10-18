@@ -9,7 +9,7 @@ export const DiagramTitleSchema = z.string()
   .trim()
   .min(1, "Title cannot be empty")
   .max(100, "Title must be less than 100 characters")
-  .regex(/^[a-zA-Z0-9\s\-_.,!?()\[\]\/&]+$/, "Title contains invalid characters");
+  .regex(/^[a-zA-Z0-9\s\-_.,!?()[\]/&]+$/, "Title contains invalid characters");
 
 export const DiagramDescriptionSchema = z.string()
   .trim()

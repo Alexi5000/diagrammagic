@@ -55,18 +55,14 @@ export function useProfile(): UseProfileReturn {
   const updateProfile = useCallback(async (updates: { username?: string; avatar_url?: string }) => {
     if (!user) return;
 
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', user.id);
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id);
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setProfile(prev => prev ? { ...prev, ...updates } : null);
-    } catch (err) {
-      throw err;
-    }
+    setProfile(prev => prev ? { ...prev, ...updates } : null);
   }, [user]);
 
   return { profile, isLoading, error, updateProfile };
