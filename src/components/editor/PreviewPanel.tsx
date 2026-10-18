@@ -127,7 +127,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ code, isDarkMode = false, c
       {/* Rendered Diagram */}
       {svg && !loading && !error && (
         <div className="mermaid-container h-full w-full overflow-auto">
-          <div dangerouslySetInnerHTML={{ __html: svg }} />
+          <div className="diagram-container" dangerouslySetInnerHTML={{ __html: svg }} />
         </div>
       )}
     </div>
