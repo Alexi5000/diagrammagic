@@ -177,7 +177,7 @@ DiagramMagic ships with **12 professionally crafted templates** organized by cat
 1. Add to `templates` array in `src/data/templates.ts`
 2. Use format: `tpl-{category}-{name}-{number}`
 3. Include all required fields (id, name, description, code, type, category, difficulty)
-4. Run tests: `npm run test`
+4. Run unit tests: `npx vitest run src`
 5. Verify in browser console: Look for template ID in startup logs
 
 ## 🧪 Testing
@@ -185,11 +185,13 @@ DiagramMagic ships with **12 professionally crafted templates** organized by cat
 Run tests:
 
 ```bash
-npm run test        # Run once
-npm run test:watch  # Watch mode
+npx vitest run src  # Run the source unit tests once
+npx vitest src      # Watch source unit tests
 ```
 
-Test files follow the pattern `*.test.ts` or `*.spec.ts` and are placed alongside components or in `__tests__` directories.
+Unit tests live in `src/**/__tests__/` and use the installed Vitest runner; the repository does not define `test` or `test:watch` npm scripts.
+
+Browser tests live in `e2e/`. Their configuration and fixture import `lovable-agent-playwright-config`, which is not declared in this repository's package manifest. That harness must be supplied or the configuration adapted before browser tests can run in a standalone checkout; a passing unit suite does not establish end-to-end coverage.
 
 ## 🔒 Security
 
