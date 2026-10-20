@@ -217,3 +217,10 @@ All magic numbers are centralized in `src/config/tokens.ts`:
 - Validation limits
 
 This ensures consistency and makes changes propagate automatically.
+
+## License status
+
+This repository currently has no root project license file. The license in
+`vendor/braces/LICENSE` applies to that vendored dependency, not to the project
+as a whole. Project licensing remains an owner decision; no project-wide
+license is asserted here.
