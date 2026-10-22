@@ -10,7 +10,7 @@ const footerLinks = {
   ],
   resources: [
     { label: 'Mermaid Docs', href: 'https://mermaid.js.org', external: true },
-    { label: 'GitHub', href: 'https://github.com', external: true },
+    { label: 'GitHub', href: 'https://github.com/Alexi5000/diagrammagic', external: true },
   ],
   legal: [
     { label: 'Privacy', href: '#' },
