@@ -71,7 +71,7 @@ const SaveDiagramDialog: React.FC<SaveDiagramDialogProps> = ({
       if (error instanceof z.ZodError) {
         toast({
           title: "Invalid Tag",
-          description: error.errors[0].message,
+          description: error.issues[0].message,
           variant: "destructive",
         });
       }
@@ -106,7 +106,7 @@ const SaveDiagramDialog: React.FC<SaveDiagramDialogProps> = ({
       if (error instanceof z.ZodError) {
         toast({
           title: "Validation Error",
-          description: error.errors[0].message,
+          description: error.issues[0].message,
           variant: "destructive",
         });
       }
