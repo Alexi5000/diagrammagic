@@ -93,7 +93,16 @@ npm install
 cp .env.example .env
 ```
 
-Set your Supabase and OpenAI credentials in `.env`.
+Set your Supabase project values in `.env` (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`). These are the only variables the client reads.
+
+The OpenAI key is **not** read from `.env`. It is read server-side by the `generate-diagram` Edge Function (`Deno.env.get('OPENAI_API_KEY')`), so set it as a Supabase function secret and deploy the function:
+
+```bash
+supabase secrets set OPENAI_API_KEY=sk-...
+supabase functions deploy generate-diagram
+```
+
+Do not put the OpenAI key in `.env`: any `VITE_`-prefixed value is bundled into the browser build. If the secret is missing, generation fails with "AI service not configured".
 
 ### 3. Start Development Server
 
@@ -150,7 +159,7 @@ DiagramMagic ships with **12 professionally crafted templates** organized by cat
 1. **Template Library**: 12 pre-built diagrams in `src/data/templates.ts`
 2. **Navigation**: Click "Use Template" → `/editor?template={id}`
 3. **Loading**: Editor reads URL param and loads matching template
-4. **Validation**: Automated tests verify templates on every build
+4. **Validation**: Template tests run in CI (Quality workflow, `npx vitest run`); `npm run build` itself does not run tests
 
 ### Debugging Template Issues
 
